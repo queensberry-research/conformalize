@@ -116,7 +116,7 @@ def _add_github_push_yaml(
                     "uses": "dycw/action-uv-publish@latest",
                     "with": {
                         "username": "qrt-bot",
-                        "password": "cffb2a2f5b78a14507d8a42c0b8057a6e0126a3d",
+                        "password": "${{ secrets.ACTION_UV_PUBLISH_PASSWORD }}",
                         "publish-url": "https://gitlab.main:3000/api/packages/qrt/pypi/",
                         "native-tls": True,
                     },

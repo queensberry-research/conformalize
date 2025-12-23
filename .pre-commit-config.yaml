@@ -27,6 +27,7 @@ repos:
     rev: v0.9.3
   - hooks:
       - args:
+          - --description=Pre-commit hook to nitpick your project
           - --pre-commit--prettier
           - --pre-commit--ruff
           - --pre-commit--taplo
@@ -37,6 +38,8 @@ repos:
           - --pytest
           - --pytest--test-paths=tests
           - --python-version=3.13
+          - --readme
+          - --repo-name=pre-commit-hook-nitpick
           - --ruff
         id: nitpick
     repo: https://github.com/dycw/pre-commit-hook-nitpick
@@ -63,7 +66,7 @@ repos:
           - --gitea--push--tag
         id: nitpick
     repo: https://gitlab.main:3000/qrt-public/pre-commit-hook-nitpick
-    rev: 0.1.6
+    rev: 0.1.7
   - hooks:
       - entry: npx prettier --write
         id: prettier
