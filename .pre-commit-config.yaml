@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/dycw/conformalize
-    rev: 0.11.12
+    rev: 0.12.0
     hooks:
       - args:
           - --description=Project conformalizer
@@ -20,13 +20,16 @@ repos:
           - --script=script.py
         id: conformalize
   - repo: https://gitea.main:3000/qrt-public/conformalize
-    rev: 0.1.15
+    rev: 0.1.17
     hooks:
       - args:
+          - --gitea-host=gitea.main
           # - --gitea--pull-request--pyright
           # - --gitea--pull-request--pytest
           # - --gitea--pull-request--ruff
           - --gitea--push--tag
+          - --python-version=3.12
+          - --script=script.py
         id: conformalize
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0

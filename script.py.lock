@@ -8,7 +8,7 @@ prerelease-mode = "disallow"
 [manifest]
 requirements = [
     { name = "click", specifier = ">=8.3.1,<8.4" },
-    { name = "dycw-conformalize", specifier = ">=0.11.12,<0.12" },
+    { name = "dycw-conformalize", specifier = ">=0.12.0,<0.13" },
     { name = "dycw-utilities", specifier = ">=0.175.36,<0.176" },
     { name = "pyright" },
     { name = "pytest-xdist" },
@@ -54,7 +54,7 @@ wheels = [
 
 [[package]]
 name = "dycw-conformalize"
-version = "0.11.12"
+version = "0.12.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -67,7 +67,7 @@ dependencies = [
     { name = "xdg-base-dirs" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a6/94/05ed8f89ee3e8cbf86d87eb88cb78da3c7b3b0c74b0c5d2593086482e9f9/dycw_conformalize-0.11.12-py3-none-any.whl", hash = "sha256:1c463a7f964563c0f94d0fe108ebee41178ff9a2731d8ce99b087823dacd5229", size = 16261, upload-time = "2026-01-03T22:10:19.354Z" },
+    { url = "https://files.pythonhosted.org/packages/45/4a/ebadff11b19facd6a2a004ed3f0a1f5f3c268a431c407e2491276824fdfe/dycw_conformalize-0.12.0-py3-none-any.whl", hash = "sha256:16003435b9d4d1385aa903179ddbdff9775af735e8456a4c68e5e715d6724963", size = 16368, upload-time = "2026-01-03T22:35:35.064Z" },
 ]
 
 [[package]]

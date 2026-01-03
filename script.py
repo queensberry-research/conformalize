@@ -3,7 +3,7 @@
 # requires-python = ">=3.12"
 # dependencies = [
 #   "click >=8.3.1, <8.4",
-#   "dycw-conformalize >=0.11.12, <0.12",
+#   "dycw-conformalize >=0.12.0, <0.13",
 #   "dycw-utilities >=0.175.36, <0.176",
 #   "rich >=14.2.0, <14.3",
 #   "typed-settings[attrs, click] >=25.3.0, <25.4",
@@ -28,6 +28,7 @@ from conformalize.lib import (
     run_action_pytest_dict,
     run_action_ruff_dict,
     run_action_tag_dict,
+    yield_python_versions,
     yield_yaml_dict,
 )
 from conformalize.settings import LOADER
@@ -45,7 +46,7 @@ if TYPE_CHECKING:
     from conformalize.types import StrDict
 
 
-__version__ = "0.1.17"
+__version__ = "0.1.18"
 LOGGER = getLogger(__name__)
 SECRETS_ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
 
@@ -194,7 +195,7 @@ def add_gitea_pull_request_yaml(
             os = get_list(matrix, "os")
             ensure_contains(os, "ubuntu-latest")
             python_version_dict = get_list(matrix, "python-version")
-            ensure_contains(python_version_dict, "3.13", "3.14")
+            ensure_contains(python_version_dict, *yield_python_versions(python_version))
             resolution = get_list(matrix, "resolution")
             ensure_contains(resolution, "highest", "lowest-direct")
             if pytest__timeout is not None:
