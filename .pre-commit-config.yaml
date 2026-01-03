@@ -24,9 +24,9 @@ repos:
     hooks:
       - args:
           - --gitea-host=gitea.main
-          # - --gitea--pull-request--pyright
-          # - --gitea--pull-request--pytest
-          # - --gitea--pull-request--ruff
+          - --gitea--pull-request--pyright
+          - --gitea--pull-request--pytest
+          - --gitea--pull-request--ruff
           - --gitea--push--tag
           - --python-version=3.12
           - --script=script.py

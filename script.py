@@ -7,8 +7,8 @@
 #   "dycw-utilities >=0.175.36, <0.176",
 #   "rich >=14.2.0, <14.3",
 #   "typed-settings[attrs, click] >=25.3.0, <25.4",
-#   "pyright",
-#   "pytest-xdist",
+#   "pyright >=1.1.407, <2",
+#   "pytest-xdist >=3.8.0, <4",
 # ]
 # ///
 from __future__ import annotations
@@ -46,7 +46,7 @@ if TYPE_CHECKING:
     from conformalize.types import StrDict
 
 
-__version__ = "0.1.18"
+__version__ = "0.1.19"
 LOGGER = getLogger(__name__)
 SECRETS_ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
 
