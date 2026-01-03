@@ -46,7 +46,7 @@ if TYPE_CHECKING:
     from conformalize.types import StrDict
 
 
-__version__ = "0.1.19"
+__version__ = "0.1.20"
 LOGGER = getLogger(__name__)
 SECRETS_ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
 
@@ -159,6 +159,7 @@ def add_gitea_pull_request_yaml(
             steps = get_list(pre_commit_dict, "steps")
             ensure_contains(
                 steps,
+                random_sleep("pre-commit"),
                 update_ca_certificates("pre-commit"),
                 run_action_pre_commit_dict(token_uv=SECRETS_ACTION_TOKEN),
             )
@@ -168,6 +169,7 @@ def add_gitea_pull_request_yaml(
             steps = get_list(pyright_dict, "steps")
             ensure_contains(
                 steps,
+                random_sleep("pyright"),
                 update_ca_certificates("pyright"),
                 run_action_pyright_dict(
                     python_version=python_version,
@@ -186,6 +188,7 @@ def add_gitea_pull_request_yaml(
             steps = get_list(pytest_dict, "steps")
             ensure_contains(
                 steps,
+                random_sleep("pytest"),
                 update_ca_certificates("pytest"),
                 run_action_pytest_dict(script=script, token_uv=SECRETS_ACTION_TOKEN),
             )
@@ -206,6 +209,7 @@ def add_gitea_pull_request_yaml(
             steps = get_list(ruff_dict, "steps")
             ensure_contains(
                 steps,
+                random_sleep("ruff"),
                 update_ca_certificates("ruff"),
                 run_action_ruff_dict(token_ruff=SECRETS_ACTION_TOKEN),
             )
@@ -254,6 +258,15 @@ def add_gitea_push_yaml(
                     native_tls=True,
                 ),
             )
+
+
+def random_sleep(desc: str, /) -> StrDict:
+    return {
+        "if": "gitea.event_name == 'schedule'",
+        "name": f"Random sleep with logging ({desc})",
+        "uses": "dycw/action-random-sleep@latest",
+        "with": {"max": 3600, "step": 60},
+    }
 
 
 def update_ca_certificates(desc: str, /) -> StrDict:
