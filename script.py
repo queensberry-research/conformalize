@@ -19,7 +19,6 @@ from typing import TYPE_CHECKING
 import conformalize.logging
 from click import command
 from conformalize.lib import (
-    StrDict,
     ensure_contains,
     get_dict,
     get_list,
@@ -43,8 +42,10 @@ if TYPE_CHECKING:
     from collections.abc import MutableSet
     from pathlib import Path
 
+    from conformalize.types import StrDict
 
-__version__ = "0.1.13"
+
+__version__ = "0.1.14"
 LOGGER = getLogger(__name__)
 
 
