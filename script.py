@@ -3,7 +3,7 @@
 # requires-python = ">=3.12"
 # dependencies = [
 #   "click >=8.3.1, <8.4",
-#   "dycw-conformalize >=0.11.4, <0.12",
+#   "dycw-conformalize >=0.11.10, <0.12",
 #   "dycw-utilities >=0.175.36, <0.176",
 #   "rich >=14.2.0, <14.3",
 #   "typed-settings[attrs, click] >=25.3.0, <25.4",
@@ -45,8 +45,9 @@ if TYPE_CHECKING:
     from conformalize.types import StrDict
 
 
-__version__ = "0.1.14"
+__version__ = "0.1.15"
 LOGGER = getLogger(__name__)
+SECRETS_ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
 
 
 @settings
@@ -153,7 +154,7 @@ def add_gitea_pull_request_yaml(
             ensure_contains(
                 steps,
                 update_ca_certificates("pre-commit"),
-                run_action_pre_commit_dict(),
+                run_action_pre_commit_dict(token_uv=SECRETS_ACTION_TOKEN),
             )
         if pyright:
             pyright_dict = get_dict(jobs, "pyright")
@@ -162,7 +163,9 @@ def add_gitea_pull_request_yaml(
             ensure_contains(
                 steps,
                 update_ca_certificates("pyright"),
-                run_action_pyright_dict(python_version=python_version),
+                run_action_pyright_dict(
+                    python_version=python_version, token_uv=SECRETS_ACTION_TOKEN
+                ),
             )
         if pytest:
             pytest_dict = get_dict(jobs, "pytest")
@@ -174,7 +177,9 @@ def add_gitea_pull_request_yaml(
             pytest_dict["runs-on"] = "${{matrix.os}}"
             steps = get_list(pytest_dict, "steps")
             ensure_contains(
-                steps, update_ca_certificates("pytest"), run_action_pytest_dict()
+                steps,
+                update_ca_certificates("pytest"),
+                run_action_pytest_dict(token_uv=SECRETS_ACTION_TOKEN),
             )
             strategy_dict = get_dict(pytest_dict, "strategy")
             strategy_dict["fail-fast"] = False
@@ -192,7 +197,9 @@ def add_gitea_pull_request_yaml(
             ruff_dict["runs-on"] = "ubuntu-latest"
             steps = get_list(ruff_dict, "steps")
             ensure_contains(
-                steps, update_ca_certificates("ruff"), run_action_ruff_dict()
+                steps,
+                update_ca_certificates("ruff"),
+                run_action_ruff_dict(token_ruff=SECRETS_ACTION_TOKEN),
             )
 
 
@@ -219,7 +226,11 @@ def add_gitea_push_yaml(
             tag_dict = get_dict(jobs, "tag")
             tag_dict["runs-on"] = "ubuntu-latest"
             steps = get_list(tag_dict, "steps")
-            ensure_contains(steps, update_ca_certificates("tag"), run_action_tag_dict())
+            ensure_contains(
+                steps,
+                update_ca_certificates("tag"),
+                run_action_tag_dict(token_uv=SECRETS_ACTION_TOKEN),
+            )
         if pypi:
             pypi_dict = get_dict(jobs, "pypi")
             pypi_dict["runs-on"] = "ubuntu-latest"
@@ -228,6 +239,7 @@ def add_gitea_push_yaml(
                 steps,
                 update_ca_certificates("pypi"),
                 run_action_publish_dict(
+                    token_uv=SECRETS_ACTION_TOKEN,
                     username="qrt-bot",
                     password="${{secrets.ACTION_UV_PUBLISH_PASSWORD}}",  # noqa: S106
                     publish_url=f"https://{gitea_host}:3000/api/packages/qrt/pypi/",

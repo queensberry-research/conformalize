@@ -7,7 +7,7 @@ jobs:
   tag:
     runs-on: ubuntu-latest
     steps:
-      - name: Update CA certificates
+      - name: Update CA certificates (tag)
         run: sudo update-ca-certificates
       - name: Tag latest commit
         uses: dycw/action-tag@latest
