@@ -19,12 +19,15 @@ repos:
           - --ruff
           - --script=script.py
         id: conformalize
-        # - repo: https://gitea.main:3000/qrt-public/pre-commit-hook-nitpick
-        #   rev: 0.1.9
-        #   hooks:
-        #     - args:
-        #         - --gitea--push--tag
-        #       id: nitpick
+  - repo: https://gitea.main:3000/qrt-public/conformalize
+    rev: 0.1.11
+    hooks:
+      - args:
+          # - --gitea--pull-request--pyright
+          # - --gitea--pull-request--pytest
+          # - --gitea--pull-request--ruff
+          - --gitea--push--tag
+        id: conformalize
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:

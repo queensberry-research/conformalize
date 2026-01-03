@@ -42,7 +42,7 @@ if TYPE_CHECKING:
     from collections.abc import MutableSet
     from pathlib import Path
 
-__version__ = "0.1.11"
+__version__ = "0.1.12"
 LOGGER = getLogger(__name__)
 UPDATE_CA_CERTIFICATES = {
     "name": "Update CA certificates",
@@ -151,14 +151,16 @@ def add_gitea_pull_request_yaml(
             pre_commit_dict = get_dict(jobs, "pre-commit")
             pre_commit_dict["runs-on"] = "ubuntu-latest"
             steps = get_list(pre_commit_dict, "steps")
-            ensure_contains(steps, UPDATE_CA_CERTIFICATES, run_action_pre_commit_dict())
+            ensure_contains(
+                steps, UPDATE_CA_CERTIFICATES.copy(), run_action_pre_commit_dict()
+            )
         if pyright:
             pyright_dict = get_dict(jobs, "pyright")
             pyright_dict["runs-on"] = "ubuntu-latest"
             steps = get_list(pyright_dict, "steps")
             ensure_contains(
                 steps,
-                UPDATE_CA_CERTIFICATES,
+                UPDATE_CA_CERTIFICATES.copy(),
                 run_action_pyright_dict(python_version=python_version),
             )
         if pytest:
@@ -170,7 +172,9 @@ def add_gitea_pull_request_yaml(
             )
             pytest_dict["runs-on"] = "${{matrix.os}}"
             steps = get_list(pytest_dict, "steps")
-            ensure_contains(steps, UPDATE_CA_CERTIFICATES, run_action_pytest_dict())
+            ensure_contains(
+                steps, UPDATE_CA_CERTIFICATES.copy(), run_action_pytest_dict()
+            )
             strategy_dict = get_dict(pytest_dict, "strategy")
             strategy_dict["fail-fast"] = False
             matrix = get_dict(strategy_dict, "matrix")
@@ -186,7 +190,9 @@ def add_gitea_pull_request_yaml(
             ruff_dict = get_dict(jobs, "ruff")
             ruff_dict["runs-on"] = "ubuntu-latest"
             steps = get_list(ruff_dict, "steps")
-            ensure_contains(steps, UPDATE_CA_CERTIFICATES, run_action_ruff_dict())
+            ensure_contains(
+                steps, UPDATE_CA_CERTIFICATES.copy(), run_action_ruff_dict()
+            )
 
 
 def add_gitea_push_yaml(
@@ -212,14 +218,14 @@ def add_gitea_push_yaml(
             tag_dict = get_dict(jobs, "tag")
             tag_dict["runs-on"] = "ubuntu-latest"
             steps = get_list(tag_dict, "steps")
-            ensure_contains(steps, UPDATE_CA_CERTIFICATES, run_action_tag_dict())
+            ensure_contains(steps, UPDATE_CA_CERTIFICATES.copy(), run_action_tag_dict())
         if pypi:
             pypi_dict = get_dict(jobs, "pypi")
             pypi_dict["runs-on"] = "ubuntu-latest"
             steps = get_list(pypi_dict, "steps")
             ensure_contains(
                 steps,
-                UPDATE_CA_CERTIFICATES,
+                UPDATE_CA_CERTIFICATES.copy(),
                 run_action_publish_dict(
                     username="qrt-bot",
                     password="${{secrets.ACTION_UV_PUBLISH_PASSWORD}}",  # noqa: S106
