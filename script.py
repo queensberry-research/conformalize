@@ -45,7 +45,7 @@ if TYPE_CHECKING:
     from conformalize.types import StrDict
 
 
-__version__ = "0.1.16"
+__version__ = "0.1.17"
 LOGGER = getLogger(__name__)
 SECRETS_ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
 
@@ -76,6 +76,9 @@ class Settings:
         default=None, help="Set up 'pytest.toml' timeout"
     )
     python_version: str = option(default="3.13", help="Python version")
+    script: str | None = option(
+        default=None, help="Set up a script instead of a package"
+    )
 
 
 SETTINGS = load_settings(Settings, [LOADER])
@@ -111,6 +114,7 @@ def main(settings: Settings, /) -> None:
             pytest__timeout=settings.pytest__timeout,
             ruff=settings.gitea__pull_request__ruff,
             python_version=settings.python_version,
+            script=settings.script,
         )
     if (
         settings.gitea__push__docker
@@ -135,6 +139,7 @@ def add_gitea_pull_request_yaml(
     pytest__timeout: int | None = SETTINGS.pytest__timeout,
     ruff: bool = SETTINGS.gitea__pull_request__ruff,
     python_version: str = SETTINGS.python_version,
+    script: str | None = SETTINGS.script,
 ) -> None:
     with yield_yaml_dict(
         ".gitea/workflows/pull-request.yaml", modifications=modifications
@@ -164,7 +169,9 @@ def add_gitea_pull_request_yaml(
                 steps,
                 update_ca_certificates("pyright"),
                 run_action_pyright_dict(
-                    python_version=python_version, token_uv=SECRETS_ACTION_TOKEN
+                    python_version=python_version,
+                    script=script,
+                    token_uv=SECRETS_ACTION_TOKEN,
                 ),
             )
         if pytest:
@@ -179,7 +186,7 @@ def add_gitea_pull_request_yaml(
             ensure_contains(
                 steps,
                 update_ca_certificates("pytest"),
-                run_action_pytest_dict(token_uv=SECRETS_ACTION_TOKEN),
+                run_action_pytest_dict(script=script, token_uv=SECRETS_ACTION_TOKEN),
             )
             strategy_dict = get_dict(pytest_dict, "strategy")
             strategy_dict["fail-fast"] = False
