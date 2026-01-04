@@ -60,8 +60,9 @@ if TYPE_CHECKING:
     from tomlkit.items import Table
 
 
-__version__ = "0.1.25"
+__version__ = "0.1.26"
 LOGGER = getLogger(__name__)
+API_PACKAGES_QRT_PYPI = "api/packages/qrt/pypi"
 SECRETS_ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
 
 
@@ -103,6 +104,10 @@ class Settings:
     script: str | None = option(
         default=None, help="Set up a script instead of a package"
     )
+
+    @property
+    def gitea_host_port(self) -> str:
+        return f"{self.gitea_host}:{self.gitea_port}"
 
 
 SETTINGS = load_settings(Settings, [LOADER])
@@ -153,13 +158,12 @@ def main(settings: Settings, /) -> None:
             docker=settings.gitea__push__docker,
             pypi=settings.gitea__push__pypi,
             tag=settings.gitea__push__tag,
-            gitea_host=settings.gitea_host,
+            gitea_host_port=settings.gitea_host_port,
         )
     if settings.pyproject:
         add_pyproject_toml(
             modifications=modifications,
-            gitea_host=settings.gitea_host,
-            gitea_port=settings.gitea_port,
+            gitea_host_port=settings.gitea_host_port,
             gitea_pypi_username=settings.gitea_pypi_username,
             gitea_pypi_token=settings.gitea_pypi_token,
         )
@@ -261,7 +265,7 @@ def add_gitea_push_yaml(
     docker: bool = SETTINGS.gitea__push__docker,
     pypi: bool = SETTINGS.gitea__push__pypi,
     tag: bool = SETTINGS.gitea__push__tag,
-    gitea_host: str = SETTINGS.gitea_host,
+    gitea_host_port: str = SETTINGS.gitea_host_port,
 ) -> None:
     with yield_yaml_dict(
         ".gitea/workflows/push.yaml", modifications=modifications
@@ -294,7 +298,7 @@ def add_gitea_push_yaml(
                     token_uv=SECRETS_ACTION_TOKEN,
                     username="qrt-bot",
                     password="${{secrets.ACTION_UV_PUBLISH_PASSWORD}}",  # noqa: S106
-                    publish_url=f"https://{gitea_host}:3000/api/packages/qrt/pypi/",
+                    publish_url=f"https://{gitea_host_port}/{API_PACKAGES_QRT_PYPI}",
                     native_tls=True,
                 ),
             )
@@ -306,8 +310,7 @@ def add_gitea_push_yaml(
 def add_pyproject_toml(
     *,
     modifications: MutableSet[Path] | None = None,
-    gitea_host: str = SETTINGS.gitea_host,
-    gitea_port: int = SETTINGS.gitea_port,
+    gitea_host_port: str = SETTINGS.gitea_host_port,
     gitea_pypi_username: str = SETTINGS.gitea_pypi_username,
     gitea_pypi_token: Secret[str] = SETTINGS.gitea_pypi_token,
 ) -> None:
@@ -318,8 +321,7 @@ def add_pyproject_toml(
         ensure_aot_contains(
             index,
             _add_pyproject_toml_index(
-                gitea_host=gitea_host,
-                gitea_port=gitea_port,
+                gitea_host_port=gitea_host_port,
                 gitea_pypi_username=gitea_pypi_username,
                 gitea_pypi_token=gitea_pypi_token,
             ),
@@ -328,8 +330,7 @@ def add_pyproject_toml(
 
 def _add_pyproject_toml_index(
     *,
-    gitea_host: str = SETTINGS.gitea_host,
-    gitea_port: int = SETTINGS.gitea_port,
+    gitea_host_port: str = SETTINGS.gitea_host_port,
     gitea_pypi_username: str = SETTINGS.gitea_pypi_username,
     gitea_pypi_token: Secret[str] = SETTINGS.gitea_pypi_token,
 ) -> Table:
@@ -337,7 +338,7 @@ def _add_pyproject_toml_index(
     tab["explicit"] = True
     tab["name"] = "gitea"
     tab["url"] = (
-        f"https://{gitea_pypi_username}:{gitea_pypi_token}@{gitea_host}:{gitea_port}/api/packages/qrt/pypi/simple"
+        f"https://{gitea_pypi_username}:{gitea_pypi_token.get_secret_value()}@{gitea_host_port}/{API_PACKAGES_QRT_PYPI}/simple"
     )
     return tab
 
