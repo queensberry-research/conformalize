@@ -18,10 +18,14 @@ from typing import TYPE_CHECKING
 
 import conformalize.logging
 from click import command
+from conformalize.constants import PYPROJECT_TOML
 from conformalize.lib import (
+    ensure_aot_contains,
     ensure_contains,
+    get_aot,
     get_dict,
     get_list,
+    get_table,
     run_action_pre_commit_dict,
     run_action_publish_dict,
     run_action_pyright_dict,
@@ -29,11 +33,20 @@ from conformalize.lib import (
     run_action_ruff_dict,
     run_action_tag_dict,
     yield_python_versions,
+    yield_toml_doc,
     yield_yaml_dict,
 )
 from conformalize.settings import LOADER
 from rich.pretty import pretty_repr
-from typed_settings import click_options, load_settings, option, settings
+from tomlkit import table
+from typed_settings import (
+    Secret,
+    click_options,
+    load_settings,
+    option,
+    secret,
+    settings,
+)
 from utilities.click import CONTEXT_SETTINGS
 from utilities.logging import basic_config
 from utilities.os import is_pytest
@@ -44,9 +57,10 @@ if TYPE_CHECKING:
     from pathlib import Path
 
     from conformalize.types import StrDict
+    from tomlkit.items import Table
 
 
-__version__ = "0.1.24"
+__version__ = "0.1.25"
 LOGGER = getLogger(__name__)
 SECRETS_ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
 
@@ -54,6 +68,14 @@ SECRETS_ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
 @settings
 class Settings:
     gitea_host: str = option(default="gitea.main", help="Gitea host")
+    gitea_port: int = option(default=3000, help="Gitea port")
+    gitea_pypi_username: str = option(
+        default="qrt-bot", help="Gitea PyPI publish username"
+    )
+    gitea_pypi_token: Secret[str] = secret(
+        default=Secret("e43d1df41a3ecf96e4adbaf04e98cfaf094d253e"),
+        help="Gitea PyPI publish token",
+    )
     gitea__pull_request__pre_commit: bool = option(
         default=False, help="Set up 'pull-request.yaml' pre-commit"
     )
@@ -73,6 +95,7 @@ class Settings:
         default=False, help="Set up 'push.yaml' with 'pypi'"
     )
     gitea__push__tag: bool = option(default=False, help="Set up 'push.yaml' with 'tag'")
+    pyproject: bool = option(default=False, help="Set up 'pyproject.toml'")
     pytest__timeout: int | None = option(
         default=None, help="Set up 'pytest.toml' timeout"
     )
@@ -83,6 +106,9 @@ class Settings:
 
 
 SETTINGS = load_settings(Settings, [LOADER])
+
+
+##
 
 
 @command(**CONTEXT_SETTINGS)
@@ -129,6 +155,17 @@ def main(settings: Settings, /) -> None:
             tag=settings.gitea__push__tag,
             gitea_host=settings.gitea_host,
         )
+    if settings.pyproject:
+        add_pyproject_toml(
+            modifications=modifications,
+            gitea_host=settings.gitea_host,
+            gitea_port=settings.gitea_port,
+            gitea_pypi_username=settings.gitea_pypi_username,
+            gitea_pypi_token=settings.gitea_pypi_token,
+        )
+
+
+##
 
 
 def add_gitea_pull_request_yaml(
@@ -215,6 +252,9 @@ def add_gitea_pull_request_yaml(
             )
 
 
+##
+
+
 def add_gitea_push_yaml(
     *,
     modifications: MutableSet[Path] | None = None,
@@ -258,6 +298,51 @@ def add_gitea_push_yaml(
                     native_tls=True,
                 ),
             )
+
+
+##
+
+
+def add_pyproject_toml(
+    *,
+    modifications: MutableSet[Path] | None = None,
+    gitea_host: str = SETTINGS.gitea_host,
+    gitea_port: int = SETTINGS.gitea_port,
+    gitea_pypi_username: str = SETTINGS.gitea_pypi_username,
+    gitea_pypi_token: Secret[str] = SETTINGS.gitea_pypi_token,
+) -> None:
+    with yield_toml_doc(PYPROJECT_TOML, modifications=modifications) as doc:
+        tool = get_table(doc, "tool")
+        uv = get_table(tool, "uv")
+        index = get_aot(uv, "index")
+        ensure_aot_contains(
+            index,
+            _add_pyproject_toml_index(
+                gitea_host=gitea_host,
+                gitea_port=gitea_port,
+                gitea_pypi_username=gitea_pypi_username,
+                gitea_pypi_token=gitea_pypi_token,
+            ),
+        )
+
+
+def _add_pyproject_toml_index(
+    *,
+    gitea_host: str = SETTINGS.gitea_host,
+    gitea_port: int = SETTINGS.gitea_port,
+    gitea_pypi_username: str = SETTINGS.gitea_pypi_username,
+    gitea_pypi_token: Secret[str] = SETTINGS.gitea_pypi_token,
+) -> Table:
+    tab = table()
+    tab["explicit"] = True
+    tab["name"] = "gitea"
+    tab["url"] = (
+        f"https://{gitea_pypi_username}:{gitea_pypi_token}@{gitea_host}:{gitea_port}/api/packages/qrt/pypi/simple"
+    )
+    return tab
+
+
+##
 
 
 def random_sleep(desc: str, /) -> StrDict:
