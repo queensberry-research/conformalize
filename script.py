@@ -1,4 +1,4 @@
-#!/usr/bin/env -S uv run --script
+#!/usr/bin/env -S uv run --script --prerelease=disallow
 # /// script
 # requires-python = ">=3.12"
 # dependencies = [
@@ -46,7 +46,7 @@ if TYPE_CHECKING:
     from conformalize.types import StrDict
 
 
-__version__ = "0.1.21"
+__version__ = "0.1.22"
 LOGGER = getLogger(__name__)
 SECRETS_ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
 

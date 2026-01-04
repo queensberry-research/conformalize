@@ -54,7 +54,7 @@ wheels = [
 
 [[package]]
 name = "dycw-conformalize"
-version = "0.12.0"
+version = "0.12.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -67,7 +67,7 @@ dependencies = [
     { name = "xdg-base-dirs" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/45/4a/ebadff11b19facd6a2a004ed3f0a1f5f3c268a431c407e2491276824fdfe/dycw_conformalize-0.12.0-py3-none-any.whl", hash = "sha256:16003435b9d4d1385aa903179ddbdff9775af735e8456a4c68e5e715d6724963", size = 16368, upload-time = "2026-01-03T22:35:35.064Z" },
+    { url = "https://files.pythonhosted.org/packages/3b/19/a79c239e5dc9081e8c66bbed483f90915e34151d79b17858dcbf0d9b7b32/dycw_conformalize-0.12.2-py3-none-any.whl", hash = "sha256:db159b0c683fd8e1c00b4cd3738ab5784083387e8e4108b80b169218249d1ba9", size = 16495, upload-time = "2026-01-04T00:29:52.602Z" },
 ]
 
 [[package]]
