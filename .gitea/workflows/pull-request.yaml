@@ -6,6 +6,24 @@ on:
   schedule:
     - cron: 0 0 * * *
 jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - if: gitea.event_name == 'schedule'
+        name: Random sleep with logging (pre-commit)
+        uses: dycw/action-random-sleep@latest
+        with:
+          max: 3600
+          step: 60
+      - name: Update CA certificates (pre-commit)
+        run: sudo update-ca-certificates
+      - name: Run 'pre-commit'
+        uses: dycw/action-pre-commit@latest
+        with:
+          repos: |-
+            dycw/conformalize
+            pre-commit/pre-commit-hooks
+          token-uv: ${{secrets.ACTION_TOKEN}}
   pyright:
     runs-on: ubuntu-latest
     steps:

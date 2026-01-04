@@ -46,7 +46,7 @@ if TYPE_CHECKING:
     from conformalize.types import StrDict
 
 
-__version__ = "0.1.22"
+__version__ = "0.1.24"
 LOGGER = getLogger(__name__)
 SECRETS_ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
 
