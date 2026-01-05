@@ -64,7 +64,7 @@ if TYPE_CHECKING:
     from tomlkit.items import Table
 
 
-__version__ = "0.1.28"
+__version__ = "0.1.30"
 LOGGER = getLogger(__name__)
 API_PACKAGES_QRT_PYPI = "api/packages/qrt/pypi"
 SECRETS_ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
