@@ -64,7 +64,7 @@ if TYPE_CHECKING:
     from tomlkit.items import Table
 
 
-__version__ = "0.1.30"
+__version__ = "0.1.31"
 LOGGER = getLogger(__name__)
 API_PACKAGES_QRT_PYPI = "api/packages/qrt/pypi"
 SECRETS_ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
@@ -211,8 +211,8 @@ def add_gitea_pull_request_yaml(
             steps = get_list(pre_commit_dict, "steps")
             ensure_contains(
                 steps,
-                random_sleep("pre-commit"),
                 update_ca_certificates("pre-commit"),
+                random_sleep("pre-commit"),
                 run_action_pre_commit_dict(
                     token_uv=SECRETS_ACTION_TOKEN,
                     submodules=pre_commit__submodules,
@@ -231,8 +231,8 @@ def add_gitea_pull_request_yaml(
             steps = get_list(pyright_dict, "steps")
             ensure_contains(
                 steps,
-                random_sleep("pyright"),
                 update_ca_certificates("pyright"),
+                random_sleep("pyright"),
                 run_action_pyright_dict(
                     token_uv=SECRETS_ACTION_TOKEN,
                     python_version=python_version,
@@ -251,8 +251,8 @@ def add_gitea_pull_request_yaml(
             steps = get_list(pytest_dict, "steps")
             ensure_contains(
                 steps,
-                random_sleep("pytest"),
                 update_ca_certificates("pytest"),
+                random_sleep("pytest"),
                 run_action_pytest_dict(
                     token_uv=SECRETS_ACTION_TOKEN,
                     python_version="${{matrix.python-version}}",
@@ -278,8 +278,8 @@ def add_gitea_pull_request_yaml(
             steps = get_list(ruff_dict, "steps")
             ensure_contains(
                 steps,
-                random_sleep("ruff"),
                 update_ca_certificates("ruff"),
+                random_sleep("ruff"),
                 run_action_ruff_dict(token_ruff=SECRETS_ACTION_TOKEN),
             )
 
