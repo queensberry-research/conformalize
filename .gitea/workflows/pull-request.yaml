@@ -73,6 +73,18 @@ jobs:
           prerelease: disallow
           native-tls: true
           with-requirements: script.py
+      - name: Run 'pytest'
+        uses: dycw/action-pytest@latest
+        with:
+          token-checkout: ${{github.token}}
+          token-uv: ${{secrets.ACTION_TOKEN}}
+          python-version: ${{matrix.python-version}}
+          token-sops: ${{secrets.ACTION_TOKEN}}
+          token-age: ${{secrets.ACTION_TOKEN}}
+          resolution: ${{matrix.resolution}}
+          prerelease: disallow
+          native-tls: true
+          with-requirements: script.py
     strategy:
       fail-fast: false
       matrix:

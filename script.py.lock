@@ -14,8 +14,8 @@ prerelease-mode = "disallow"
 requirements = [
     { name = "click", specifier = ">=8.3.1,<9" },
     { name = "dycw-actions", specifier = ">=0.3.42,<1" },
-    { name = "dycw-conformalize", specifier = ">=0.13.6,<1" },
-    { name = "dycw-utilities", specifier = ">=0.175.36,<1" },
+    { name = "dycw-conformalize", specifier = ">=0.13.7,<1" },
+    { name = "dycw-utilities", specifier = ">=0.175.37,<1" },
     { name = "pyright", specifier = ">=1.1.407,<2" },
     { name = "pytest-xdist", specifier = ">=3.8.0,<4" },
     { name = "rich", specifier = ">=14.2.0,<15" },
@@ -78,7 +78,7 @@ wheels = [
 
 [[package]]
 name = "dycw-conformalize"
-version = "0.13.6"
+version = "0.13.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -92,12 +92,12 @@ dependencies = [
     { name = "xdg-base-dirs" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/90/89/47d37cf693c6ac745953bb8f79269727ecd09fcc29742777cc40165d421c/dycw_conformalize-0.13.6-py3-none-any.whl", hash = "sha256:6ba38c7eabd151dfabf80e27788132a4acc5554dca91f843a0fb0e73db4504bd", size = 18013, upload-time = "2026-01-05T04:36:25.875Z" },
+    { url = "https://files.pythonhosted.org/packages/38/e7/aff66ac5594c55255f0830a7077b6f3affd342217d9de1e32fa0ec1bcb00/dycw_conformalize-0.13.7-py3-none-any.whl", hash = "sha256:dc4270a539c552d56ddb84416a9077f30ce4bfc4c5e5b46b4050ea7dbf8a4012", size = 18020, upload-time = "2026-01-06T03:18:30.33Z" },
 ]
 
 [[package]]
 name = "dycw-utilities"
-version = "0.176.3"
+version = "0.176.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "atomicwrites" },
@@ -106,7 +106,7 @@ dependencies = [
     { name = "whenever" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/b9/de/99720b98bc4f3a34dfc5be9dc500d40fa88e84e05558d134f727602505f1/dycw_utilities-0.176.3-py3-none-any.whl", hash = "sha256:c1e47bde316cd57df05076298a167bebf103be3c91bf5458c08cadc6c1c9cdf2", size = 205360, upload-time = "2026-01-05T09:19:11.021Z" },
+    { url = "https://files.pythonhosted.org/packages/34/a0/5c3234a71202e6c454513c0def077a793b0cc8a4154b84732ed8ec5e4768/dycw_utilities-0.176.4-py3-none-any.whl", hash = "sha256:7db76c539fb39e0cd1bb53c1e8f6534852041c213655389bf149be2a33dcb218", size = 205383, upload-time = "2026-01-06T07:14:39.112Z" },
 ]
 
 [[package]]

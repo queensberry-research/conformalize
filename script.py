@@ -4,8 +4,8 @@
 # dependencies = [
 #   "click >=8.3.1, <9",
 #   "dycw-actions>=0.3.42, <1",
-#   "dycw-conformalize >=0.13.6, <1",
-#   "dycw-utilities >=0.175.36, <1",
+#   "dycw-conformalize >=0.13.7, <1",
+#   "dycw-utilities >=0.175.37, <1",
 #   "rich >=14.2.0, <15",
 #   "typed-settings[attrs, click] >=25.3.0, <26",
 #   "pyright >=1.1.407, <2",
@@ -64,7 +64,7 @@ if TYPE_CHECKING:
     from tomlkit.items import Table
 
 
-__version__ = "0.1.32"
+__version__ = "0.1.33"
 LOGGER = getLogger(__name__)
 API_PACKAGES_QRT_PYPI = "api/packages/qrt/pypi"
 SECRETS_ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
@@ -92,6 +92,10 @@ class Settings:
     )
     gitea__pull_request__pytest: bool = option(
         default=False, help="Set up 'pull-request.yaml' pytest"
+    )
+    gitea__pull_request__pytest__current_version_only: bool = option(
+        default=False,
+        help="Set up 'pull-request.yaml' pytest with the current version only",
     )
     gitea__pull_request__pytest__sops_and_age: bool = option(
         default=False, help="Set up 'pull-request.yaml' pytest sops/age"
@@ -147,6 +151,7 @@ def main(settings: Settings, /) -> None:
         or settings.gitea__pull_request__pre_commit__submodules
         or settings.gitea__pull_request__pyright
         or settings.gitea__pull_request__pytest
+        or settings.gitea__pull_request__pytest__current_version_only
         or settings.gitea__pull_request__pytest__sops_and_age
         or settings.gitea__pull_request__ruff
     ):
@@ -156,6 +161,7 @@ def main(settings: Settings, /) -> None:
             pre_commit__submodules=settings.gitea__pull_request__pre_commit__submodules,
             pyright=settings.gitea__pull_request__pyright,
             pytest=settings.gitea__pull_request__pytest,
+            pytest__current_version_only=settings.gitea__pull_request__pytest__current_version_only,
             pytest__sops_and_age=settings.gitea__pull_request__pytest__sops_and_age,
             pytest__timeout=settings.pytest__timeout,
             ruff=settings.gitea__pull_request__ruff,
@@ -194,6 +200,7 @@ def add_gitea_pull_request_yaml(
     | None = SETTINGS.gitea__pull_request__pre_commit__submodules,
     pyright: bool = SETTINGS.gitea__pull_request__pyright,
     pytest: bool = SETTINGS.gitea__pull_request__pytest,
+    pytest__current_version_only: bool = SETTINGS.gitea__pull_request__pytest__current_version_only,
     pytest__sops_and_age: bool = SETTINGS.gitea__pull_request__pytest__sops_and_age,
     pytest__timeout: int | None = SETTINGS.pytest__timeout,
     ruff: bool = SETTINGS.gitea__pull_request__ruff,
@@ -246,7 +253,7 @@ def add_gitea_pull_request_yaml(
                     with_requirements=script,
                 ),
             )
-        if pytest or pytest__sops_and_age:
+        if pytest or pytest__current_version_only or pytest__sops_and_age:
             pytest_dict = get_dict(jobs, "pytest")
             env = get_dict(pytest_dict, "env")
             env["CI"] = "1"
@@ -278,7 +285,14 @@ def add_gitea_pull_request_yaml(
             os = get_list(matrix, "os")
             ensure_contains(os, "ubuntu-latest")
             python_version_dict = get_list(matrix, "python-version")
-            ensure_contains(python_version_dict, *yield_python_versions(python_version))
+            ensure_contains(
+                python_version_dict,
+                *(
+                    [python_version]
+                    if pytest__current_version_only
+                    else yield_python_versions(python_version)
+                ),
+            )
             resolution = get_list(matrix, "resolution")
             ensure_contains(resolution, "highest", "lowest-direct")
             if pytest__timeout is not None:

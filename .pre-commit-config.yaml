@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/dycw/conformalize
-    rev: 0.13.6
+    rev: 0.13.7
     hooks:
       - args:
           - --description=Project conformalizer
@@ -20,7 +20,7 @@ repos:
           - --script=script.py
         id: conformalize
   - repo: https://gitea.main:3000/qrt-public/conformalize
-    rev: 0.1.31
+    rev: 0.1.32
     hooks:
       - args:
           - --gitea-host=gitea.main
@@ -82,7 +82,7 @@ repos:
           - --option
           - reorder_keys=true
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.9.21
+    rev: 0.9.22
     hooks:
       - id: uv-lock
         files: ^script\.py$
