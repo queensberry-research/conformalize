@@ -52,7 +52,7 @@ if TYPE_CHECKING:
     from tomlkit.items import Table
 
 
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 LOGGER = getLogger(__name__)
 API_PACKAGES_QRT_PYPI = "api/packages/qrt/pypi"
 SECRETS_ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
@@ -98,6 +98,7 @@ class Settings:
         default=None, help="Set up 'pytest.toml' timeout"
     )
     python_version: str = option(default="3.13", help="Python version")
+    repo_name: str | None = option(default=None, help="Repo name")
     script: str | None = option(
         default=None, help="Set up a script instead of a package"
     )
@@ -155,10 +156,11 @@ def main(settings: Settings, /) -> None:
             if settings.ci__pull_request__pytest__sops_and_age
             else None,
             pytest__timeout=settings.pytest__timeout,
-            ruff=settings.ci__pull_request__ruff,
             python_version=settings.python_version,
+            repo_name=settings.repo_name,
+            ruff=settings.ci__pull_request__ruff,
             script=settings.script,
-            token=SECRETS_ACTION_TOKEN,
+            token_github=SECRETS_ACTION_TOKEN,
             uv__native_tls=True,
         )
     if settings.ci__push__pypi or settings.ci__push__tag:
@@ -171,7 +173,7 @@ def main(settings: Settings, /) -> None:
             publish__password=settings.ci__push__publish__password,
             publish__publish_url=settings.ci__push__publish__publish_url,
             tag=settings.ci__push__tag,
-            token=SECRETS_ACTION_TOKEN,
+            token_github=SECRETS_ACTION_TOKEN,
             uv__native_tls=True,
         )
     if settings.pyproject:

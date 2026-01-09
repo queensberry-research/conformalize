@@ -134,7 +134,7 @@ wheels = [
 
 [[package]]
 name = "dycw-actions"
-version = "0.8.13"
+version = "0.9.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -153,7 +153,7 @@ dependencies = [
     { name = "xdg-base-dirs" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/dd/ce/bea8d3653dd569dba2fed851e475235137ed45db93d1076e77a918c91158/dycw_actions-0.8.13-py3-none-any.whl", hash = "sha256:295caccd69bdfa02f27c8a2b308b2992c18e657fe024caacd84d2cb37a2204a5", size = 62915, upload-time = "2026-01-09T05:00:31.375Z" },
+    { url = "https://files.pythonhosted.org/packages/81/38/aceed43f93cb37b5546568daa1583a57febacb65d2e4ce7439b1f133f7b9/dycw_actions-0.9.0-py3-none-any.whl", hash = "sha256:ad763c123c97e336a21479622220166cc33d6b10a9d78782206166fcb109c63c", size = 62917, upload-time = "2026-01-09T06:16:02.987Z" },
 ]
 
 [[package]]

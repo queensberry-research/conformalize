@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/dycw/actions
-    rev: 0.8.12
+    rev: 0.9.0
     hooks:
       - id: conformalize-repo
         args:
@@ -24,19 +24,21 @@ repos:
       - id: touch-empty-py
       - id: touch-py-typed
       - id: update-requirements
-  # - repo: https://gitea.main:3000/qrt-public/conformalize
-  #   rev: 0.1.33
-  #   hooks:
-  #     - args:
-  #         - --gitea-host=gitea.main
-  #         - --gitea--pull-request--pre-commit
-  #         - --gitea--pull-request--pyright
-  #         - --gitea--pull-request--pytest
-  #         - --gitea--pull-request--ruff
-  #         - --gitea--push--tag
-  #         - --python-version=3.12
-  #         - --script=script.py
-  #       id: conformalize
+  - repo: https://gitea.main:3000/qrt-public/conformalize
+    rev: 0.2.0
+    hooks:
+      - args:
+          - --ci--pull-request--pre-commit
+          - --ci--pull-request--pyright
+          - --ci--pull-request--pytest
+          - --ci--pull-request--pytest--all-versions
+          - --ci--pull-request--ruff
+          - --ci--push--tag
+          - --gitea-host=gitea.main
+          - --python-version=3.12
+          # - --repo-name=conformalize
+          - --script=script.py
+        id: conformalize
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
