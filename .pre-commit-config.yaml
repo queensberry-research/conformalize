@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/dycw/actions
-    rev: 0.10.2
+    rev: 0.10.4
     hooks:
       - id: conformalize-repo
         args:
@@ -24,8 +24,8 @@ repos:
       - id: touch-empty-py
       - id: touch-py-typed
       - id: update-requirements
-  - repo: https://gitea.main:3000/qrt-public/conformalize
-    rev: 0.2.2
+  - repo: https://github.com/queensberry-research/conformalize
+    rev: 0.2.3
     hooks:
       - args:
           - --ci--pull-request--pre-commit
@@ -84,7 +84,7 @@ repos:
           - --option
           - reorder_keys=true
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.9.22
+    rev: 0.9.23
     hooks:
       - id: uv-lock
         files: ^script\.py$

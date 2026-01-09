@@ -52,7 +52,7 @@ if TYPE_CHECKING:
     from tomlkit.items import Table
 
 
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 LOGGER = getLogger(__name__)
 API_PACKAGES_QRT_PYPI = "api/packages/qrt/pypi"
 
