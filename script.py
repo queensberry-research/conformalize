@@ -1,9 +1,9 @@
 #!/usr/bin/env -S uv run --script --prerelease=disallow
 # /// script
-# requires-python = ">=3.12"
+# requires-python = ">=3.13"
 # dependencies = [
 #   "click>=8.3.1, <9",
-#   "dycw-actions>=0.10.15,<1",
+#   "dycw-actions>=0.11.0,<1",
 #   "dycw-utilities>=0.179.3, <1",
 #   "rich>=14.2.0, <15",
 #   "typed-settings[attrs,click]>=25.3.0, <26",
@@ -32,14 +32,7 @@ from actions.utilities import LOADER
 from click import command
 from rich.pretty import pretty_repr
 from tomlkit import table
-from typed_settings import (
-    Secret,
-    click_options,
-    load_settings,
-    option,
-    secret,
-    settings,
-)
+from typed_settings import Secret, click_options, load_settings, option, settings
 from utilities.click import CONTEXT_SETTINGS
 from utilities.logging import basic_config
 from utilities.os import is_pytest
@@ -52,17 +45,20 @@ if TYPE_CHECKING:
     from tomlkit.items import Table
 
 
-__version__ = "0.2.6"
+__version__ = "0.2.7"
 LOGGER = getLogger(__name__)
 API_PACKAGES_QRT_PYPI = "api/packages/qrt/pypi"
+ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
+PYPI_GITEA_USERNAME = "qrt-bot"
+PYPI_GITEA_READ_TOKEN = "${{secrets.PYPI_GITEA_READ_TOKEN}}"  # noqa: S105
+PYPI_GITEA_READ_WRITE_TOKEN = "${{secrets.PYPI_GITEA_READ_WRITE_TOKEN}}"  # noqa: S105
+PYPI_NANODE_USERNAME = "qrt"
+PYPI_NANODE_PASSWORD = "${{secrets.PYPI_NANODE_PASSWORD}}"  # noqa: S105
+SOPS_AGE_KEY = "${{secrets.SOPS_AGE_KEY}}"
 
 
 @settings
 class Settings:
-    ci__token_github: Secret[str] | None = secret(
-        default=Secret("${{secrets.ACTION_TOKEN}}"),
-        help="Set up CI with this GitHub token",
-    )
     ci__pull_request__pre_commit: bool = option(
         default=False, help="Set up 'pull-request.yaml' pre-commit"
     )
@@ -82,38 +78,18 @@ class Settings:
     ci__pull_request__pytest__sops_and_age: bool = option(
         default=False, help="Set up 'pull-request.yaml' pytest sops/age"
     )
-    ci__pull_request__pytest__sops_age_key: Secret[str] | None = secret(
-        default=Secret("${{secrets.SOPS_AGE_KEY}}"),
-        help="Set up CI 'pull-request.yaml' pytest with this 'age' key for 'sops'",
-    )
     ci__pull_request__ruff: bool = option(
         default=False, help="Set up 'pull-request.yaml' ruff"
     )
-    ci__push__pypi: bool = option(default=False, help="Set up 'push.yaml' with 'pypi'")
+    ci__push__pypi__gitea: bool = option(
+        default=False, help="Set up 'push.yaml' with 'pypi-gitea'"
+    )
     ci__push__pypi__nanode: bool = option(
-        default=False, help="Set up 'push.yaml' with 'pypi' on the 'nanode'"
+        default=False, help="Set up 'push.yaml' with 'pypi-nanode'"
     )
     ci__push__tag: bool = option(default=False, help="Set up 'push.yaml' tagging")
     gitea_host: str = option(default="gitea.main", help="Gitea host")
     gitea_port: int = option(default=3000, help="Gitea port")
-    pypi__username: str = option(default="qrt-bot", help="PyPI user name")
-    pypi__read_token: Secret[str] = secret(
-        default=Secret("e43d1df41a3ecf96e4adbaf04e98cfaf094d253e"),
-        help="PyPI read-only token",
-    )
-    pypi__read_write_token: Secret[str] = secret(
-        default=Secret("${{secrets.PYPI_READ_WRITE_TOKEN}}"),
-        help="PyPI read/write token",
-    )
-    pypi__nanode__username: str = option(default="qrt", help="PyPI (Nanode) user name")
-    pypi__nanode__password: Secret[str] = secret(
-        default=Secret("${{secrets.PYPI_NANODE_PASSWORD}}"),
-        help="PyPI (Nanode) password",
-    )
-    pypi__nanode__publish_url: Secret[str] = secret(
-        default=Secret("https://pypi.queensberryresearch.com"),
-        help="PyPI (Nanode) publish URL",
-    )
     pyproject: bool = option(default=False, help="Set up 'pyproject.toml'")
     pytest__timeout: int | None = option(
         default=None, help="Set up 'pytest.toml' timeout"
@@ -123,14 +99,6 @@ class Settings:
     script: str | None = option(
         default=None, help="Set up a script instead of a package"
     )
-
-    @property
-    def ci__push__publish__publish_url(self) -> Secret[str]:
-        return Secret(f"https://{self.gitea_host_port}/{API_PACKAGES_QRT_PYPI}")
-
-    @property
-    def gitea_host_port(self) -> str:
-        return f"{self.gitea_host}:{self.gitea_port}"
 
 
 SETTINGS = load_settings(Settings, [LOADER])
@@ -157,11 +125,8 @@ def main(settings: Settings, /) -> None:
     modifications: set[Path] = set()
     if (
         settings.ci__pull_request__pre_commit
-        or settings.ci__pull_request__pre_commit__submodules
         or settings.ci__pull_request__pyright
         or settings.ci__pull_request__pytest
-        or settings.ci__pull_request__pytest__all_versions
-        or settings.ci__pull_request__pytest__sops_and_age
         or settings.ci__pull_request__ruff
     ):
         add_ci_pull_request_yaml(
@@ -173,7 +138,7 @@ def main(settings: Settings, /) -> None:
             pyright=settings.ci__pull_request__pyright,
             pytest__ubuntu=settings.ci__pull_request__pytest,
             pytest__all_versions=settings.ci__pull_request__pytest__all_versions,
-            pytest__sops_age_key=settings.ci__pull_request__pytest__sops_age_key
+            pytest__sops_age_key=Secret(SOPS_AGE_KEY)
             if settings.ci__pull_request__pytest__sops_and_age
             else None,
             pytest__timeout=settings.pytest__timeout,
@@ -181,11 +146,11 @@ def main(settings: Settings, /) -> None:
             repo_name=settings.repo_name,
             ruff=settings.ci__pull_request__ruff,
             script=settings.script,
-            token_github=settings.ci__token_github,
+            token_github=Secret(ACTION_TOKEN),
             uv__native_tls=True,
         )
     if (
-        settings.ci__push__pypi
+        settings.ci__push__pypi__gitea
         or settings.ci__push__pypi__nanode
         or settings.ci__push__tag
     ):
@@ -193,29 +158,25 @@ def main(settings: Settings, /) -> None:
             gitea=True,
             modifications=modifications,
             certificates=True,
-            publish=settings.ci__push__pypi,
-            publish__username=settings.pypi__username,
-            publish__password=settings.pypi__read_write_token,
-            publish__publish_url=settings.ci__push__publish__publish_url,
-            publish__secondary__username=settings.pypi__nanode__username
-            if settings.ci__push__pypi__nanode
-            else None,
-            publish__secondary__password=settings.pypi__nanode__password
-            if settings.ci__push__pypi__nanode
-            else None,
-            publish__secondary__publish_url=settings.pypi__nanode__publish_url
-            if settings.ci__push__pypi__nanode
-            else None,
+            publish__primary=settings.ci__push__pypi__gitea,
+            publish__primary__job_name="gitea",
+            publish__primary__username=PYPI_GITEA_USERNAME,
+            publish__primary__password=Secret(PYPI_GITEA_READ_WRITE_TOKEN),
+            publish__primary__publish_url=f"https://{settings.gitea_host}:{settings.gitea_port}/{API_PACKAGES_QRT_PYPI}",
+            publish__secondary=settings.ci__push__pypi__nanode,
+            publish__secondary__job_name="nanode",
+            publish__secondary__username=PYPI_NANODE_USERNAME,
+            publish__secondary__password=Secret(PYPI_NANODE_PASSWORD),
+            publish__secondary__publish_url="https://pypi.queensberryresearch.com",
             tag=settings.ci__push__tag,
-            token_github=settings.ci__token_github,
+            token_github=Secret(ACTION_TOKEN),
             uv__native_tls=True,
         )
     if settings.pyproject:
         add_pyproject_toml(
             modifications=modifications,
-            gitea_host_port=settings.gitea_host_port,
-            pypi__username=settings.pypi__username,
-            pypi__read_token=settings.pypi__read_token,
+            gitea_host=settings.gitea_host,
+            gitea_port=settings.gitea_port,
         )
 
 
@@ -225,35 +186,26 @@ def main(settings: Settings, /) -> None:
 def add_pyproject_toml(
     *,
     modifications: MutableSet[Path] | None = None,
-    gitea_host_port: str = SETTINGS.gitea_host_port,
-    pypi__username: str = SETTINGS.pypi__username,
-    pypi__read_token: Secret[str] = SETTINGS.pypi__read_token,
+    gitea_host: str = SETTINGS.gitea_host,
+    gitea_port: int = SETTINGS.gitea_port,
 ) -> None:
     with yield_toml_doc(PYPROJECT_TOML, modifications=modifications) as doc:
         tool = get_table(doc, "tool")
         uv = get_table(tool, "uv")
         index = get_aot(uv, "index")
         ensure_aot_contains(
-            index,
-            _add_pyproject_toml_index(
-                host_port=gitea_host_port,
-                username=pypi__username,
-                password=pypi__read_token,
-            ),
+            index, _add_pyproject_toml_index(host=gitea_host, port=gitea_port)
         )
 
 
 def _add_pyproject_toml_index(
-    *,
-    host_port: str = SETTINGS.gitea_host_port,
-    username: str = SETTINGS.pypi__username,
-    password: Secret[str] = SETTINGS.pypi__read_token,
+    *, host: str = SETTINGS.gitea_host, port: int = SETTINGS.gitea_port
 ) -> Table:
     tab = table()
     tab["explicit"] = True
     tab["name"] = "gitea"
     tab["url"] = (
-        f"https://{username}:{password.get_secret_value()}@{host_port}/{API_PACKAGES_QRT_PYPI}/simple"
+        f"https://{PYPI_GITEA_USERNAME}:{PYPI_GITEA_READ_TOKEN}@{host}:{port}/{API_PACKAGES_QRT_PYPI}/simple"
     )
     return tab
 

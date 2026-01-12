@@ -17,6 +17,7 @@ jobs:
         with:
           token-github: ${{secrets.ACTION_TOKEN}}
           repos: |-
+            dycw/actions
             pre-commit/pre-commit-hooks
   pyright:
     runs-on: ubuntu-latest
@@ -27,7 +28,7 @@ jobs:
         uses: dycw/action-pyright@latest
         with:
           token-github: ${{secrets.ACTION_TOKEN}}
-          python-version: "3.12"
+          python-version: "3.13"
           native-tls: true
           with-requirements: script.py
   pytest:
@@ -53,7 +54,6 @@ jobs:
         os:
           - ubuntu-latest
         python-version:
-          - "3.12"
           - "3.13"
           - "3.14"
         resolution:
