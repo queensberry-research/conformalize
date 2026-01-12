@@ -13,8 +13,8 @@ prerelease-mode = "disallow"
 [manifest]
 requirements = [
     { name = "click", specifier = ">=8.3.1,<9" },
-    { name = "dycw-actions", specifier = ">=0.10.2,<1" },
-    { name = "dycw-utilities", specifier = ">=0.179.1,<1" },
+    { name = "dycw-actions", specifier = ">=0.10.15,<1" },
+    { name = "dycw-utilities", specifier = ">=0.179.3,<1" },
     { name = "pyright", specifier = ">=1.1.407,<2" },
     { name = "pytest-xdist", specifier = ">=3.8.0,<4" },
     { name = "rich", specifier = ">=14.2.0,<15" },
@@ -134,7 +134,7 @@ wheels = [
 
 [[package]]
 name = "dycw-actions"
-version = "0.10.11"
+version = "0.10.15"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -153,12 +153,12 @@ dependencies = [
     { name = "xdg-base-dirs" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/18/24/f36cdc49f0318ae63a0d1bed47d708602bb6c310d588e11ffb41a9885e32/dycw_actions-0.10.11-py3-none-any.whl", hash = "sha256:0739826ee124a7e03c7479f249f23b2a1425331667e1d2e16877dfa66a40efd2", size = 67449, upload-time = "2026-01-11T23:32:25.643Z" },
+    { url = "https://files.pythonhosted.org/packages/2a/b0/358e1d71ffdbebc25fbafeabc5ce9ac14fe5dd9211369f1b383ea5c67df5/dycw_actions-0.10.15-py3-none-any.whl", hash = "sha256:6b940f44b2d462196d3a4515efbb1dc928e594a5ae3efd5a39b7c9252913b78f", size = 68245, upload-time = "2026-01-12T11:41:03.742Z" },
 ]
 
 [[package]]
 name = "dycw-utilities"
-version = "0.179.1"
+version = "0.179.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "atomicwrites" },
@@ -167,7 +167,7 @@ dependencies = [
     { name = "whenever" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/71/c4/e6acd17c5b26cb44cae23101d67e42b1b62dd9836a976789ec510f3736ff/dycw_utilities-0.179.1-py3-none-any.whl", hash = "sha256:c5e0d553e2b6f65972ac14857c6e08f29a77abe961fdcccb6056d33818932e60", size = 207184, upload-time = "2026-01-09T04:53:16.23Z" },
+    { url = "https://files.pythonhosted.org/packages/03/7b/0049ff95bf72851e7ebdcc96038811ece07aa8abd7a4cf367a7648230c0e/dycw_utilities-0.179.3-py3-none-any.whl", hash = "sha256:c15ae6f231a614c4ae37008b7b59f6ff7a8381793e49cc37daae551f91d9de2f", size = 208557, upload-time = "2026-01-12T03:26:35.577Z" },
 ]
 
 [[package]]

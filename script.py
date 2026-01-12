@@ -3,8 +3,8 @@
 # requires-python = ">=3.12"
 # dependencies = [
 #   "click>=8.3.1, <9",
-#   "dycw-actions>=0.10.2,<1",
-#   "dycw-utilities>=0.179.1, <1",
+#   "dycw-actions>=0.10.15,<1",
+#   "dycw-utilities>=0.179.3, <1",
 #   "rich>=14.2.0, <15",
 #   "typed-settings[attrs,click]>=25.3.0, <26",
 #   "pyright>=1.1.407, <2",
@@ -52,7 +52,7 @@ if TYPE_CHECKING:
     from tomlkit.items import Table
 
 
-__version__ = "0.2.5"
+__version__ = "0.2.6"
 LOGGER = getLogger(__name__)
 API_PACKAGES_QRT_PYPI = "api/packages/qrt/pypi"
 
@@ -90,6 +90,9 @@ class Settings:
         default=False, help="Set up 'pull-request.yaml' ruff"
     )
     ci__push__pypi: bool = option(default=False, help="Set up 'push.yaml' with 'pypi'")
+    ci__push__pypi__nanode: bool = option(
+        default=False, help="Set up 'push.yaml' with 'pypi' on the 'nanode'"
+    )
     ci__push__tag: bool = option(default=False, help="Set up 'push.yaml' tagging")
     gitea_host: str = option(default="gitea.main", help="Gitea host")
     gitea_port: int = option(default=3000, help="Gitea port")
@@ -99,8 +102,17 @@ class Settings:
         help="PyPI read-only token",
     )
     pypi__read_write_token: Secret[str] = secret(
-        default=Secret("${{secrets.ACTION_UV_PUBLISH_PASSWORD}}"),
+        default=Secret("${{secrets.PYPI_READ_WRITE_TOKEN}}"),
         help="PyPI read/write token",
+    )
+    pypi__nanode__username: str = option(default="qrt", help="PyPI (Nanode) user name")
+    pypi__nanode__password: Secret[str] = secret(
+        default=Secret("${{secrets.PYPI_NANODE_PASSWORD}}"),
+        help="PyPI (Nanode) password",
+    )
+    pypi__nanode__publish_url: Secret[str] = secret(
+        default=Secret("https://pypi.queensberryresearch.com"),
+        help="PyPI (Nanode) publish URL",
     )
     pyproject: bool = option(default=False, help="Set up 'pyproject.toml'")
     pytest__timeout: int | None = option(
@@ -172,7 +184,11 @@ def main(settings: Settings, /) -> None:
             token_github=settings.ci__token_github,
             uv__native_tls=True,
         )
-    if settings.ci__push__pypi or settings.ci__push__tag:
+    if (
+        settings.ci__push__pypi
+        or settings.ci__push__pypi__nanode
+        or settings.ci__push__tag
+    ):
         add_ci_push_yaml(
             gitea=True,
             modifications=modifications,
@@ -181,6 +197,15 @@ def main(settings: Settings, /) -> None:
             publish__username=settings.pypi__username,
             publish__password=settings.pypi__read_write_token,
             publish__publish_url=settings.ci__push__publish__publish_url,
+            publish__secondary__username=settings.pypi__nanode__username
+            if settings.ci__push__pypi__nanode
+            else None,
+            publish__secondary__password=settings.pypi__nanode__password
+            if settings.ci__push__pypi__nanode
+            else None,
+            publish__secondary__publish_url=settings.pypi__nanode__publish_url
+            if settings.ci__push__pypi__nanode
+            else None,
             tag=settings.ci__push__tag,
             token_github=settings.ci__token_github,
             uv__native_tls=True,
