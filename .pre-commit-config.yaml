@@ -26,7 +26,7 @@ repos:
       - id: touch-py-typed
       - id: update-requirements
   - repo: https://github.com/queensberry-research/conformalize
-    rev: 0.2.7
+    rev: 0.2.8
     hooks:
       - args:
           - --ci--pull-request--pre-commit
