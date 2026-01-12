@@ -4,19 +4,6 @@ on:
     branches:
       - master
 jobs:
-  publish:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Update CA certificates (publish)
-        run: sudo update-ca-certificates
-      - name: Build and publish the package
-        uses: dycw/action-publish-package@latest
-        with:
-          token-github: ${{secrets.ACTION_TOKEN}}
-          username: qrt-bot
-          password: ${{secrets.PYPI_READ_WRITE_TOKEN}}
-          publish-url: https://gitea.main:3000/api/packages/qrt/pypi
-          native-tls: true
   tag:
     runs-on: ubuntu-latest
     steps:
