@@ -3,11 +3,12 @@
 # requires-python = ">=3.13"
 # dependencies = [
 #   "click>=8.3.1, <9",
-#   "dycw-actions>=0.11.0,<1",
-#   "dycw-utilities>=0.179.3, <1",
+#   "dycw-actions>=0.12.0,<1",
+#   "dycw-utilities>=0.179.4, <1",
 #   "rich>=14.2.0, <15",
 #   "typed-settings[attrs,click]>=25.3.0, <26",
-#   "pyright>=1.1.407, <2",
+#
+#   "pyright>=1.1.408, <2",
 #   "pytest-xdist>=3.8.0, <4",
 # ]
 # ///
@@ -45,7 +46,7 @@ if TYPE_CHECKING:
     from tomlkit.items import Table
 
 
-__version__ = "0.2.9"
+__version__ = "0.2.10"
 LOGGER = getLogger(__name__)
 API_PACKAGES_QRT_PYPI = "api/packages/qrt/pypi"
 ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105

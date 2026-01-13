@@ -12,9 +12,9 @@ prerelease-mode = "disallow"
 [manifest]
 requirements = [
     { name = "click", specifier = ">=8.3.1,<9" },
-    { name = "dycw-actions", specifier = ">=0.11.0,<1" },
-    { name = "dycw-utilities", specifier = ">=0.179.3,<1" },
-    { name = "pyright", specifier = ">=1.1.407,<2" },
+    { name = "dycw-actions", specifier = ">=0.12.0,<1" },
+    { name = "dycw-utilities", specifier = ">=0.179.4,<1" },
+    { name = "pyright", specifier = ">=1.1.408,<2" },
     { name = "pytest-xdist", specifier = ">=3.8.0,<4" },
     { name = "rich", specifier = ">=14.2.0,<15" },
     { name = "typed-settings", extras = ["attrs", "click"], specifier = ">=25.3.0,<26" },
@@ -117,7 +117,7 @@ wheels = [
 
 [[package]]
 name = "dycw-actions"
-version = "0.11.2"
+version = "0.12.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -136,12 +136,12 @@ dependencies = [
     { name = "xdg-base-dirs" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/40/21/84bbdae33b0d4b1eeb01e715aeb7e3cc64cff8683c7d1f4f2a79a05fdca8/dycw_actions-0.11.2-py3-none-any.whl", hash = "sha256:e45df55845988ed578e6242b3a83e51365221e4d281f03e84ef2bf0e6649fc3d", size = 68511, upload-time = "2026-01-12T14:12:22.156Z" },
+    { url = "https://files.pythonhosted.org/packages/c4/67/2f67f903e74156a33d4d75a70df2353289ac1437c6c2327fee75d10ec558/dycw_actions-0.12.2-py3-none-any.whl", hash = "sha256:f4026ab603e188307dbead652d941555c6ce3b391dafa5295063099dee0c0e2c", size = 69655, upload-time = "2026-01-13T05:37:29.062Z" },
 ]
 
 [[package]]
 name = "dycw-utilities"
-version = "0.179.3"
+version = "0.179.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "atomicwrites" },
@@ -150,7 +150,7 @@ dependencies = [
     { name = "whenever" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/03/7b/0049ff95bf72851e7ebdcc96038811ece07aa8abd7a4cf367a7648230c0e/dycw_utilities-0.179.3-py3-none-any.whl", hash = "sha256:c15ae6f231a614c4ae37008b7b59f6ff7a8381793e49cc37daae551f91d9de2f", size = 208557, upload-time = "2026-01-12T03:26:35.577Z" },
+    { url = "https://files.pythonhosted.org/packages/2c/55/7e0b5de65af908e5c619a15ed4d55d2d44cb7be65b44a3949ea2ed724701/dycw_utilities-0.179.4-py3-none-any.whl", hash = "sha256:a53e07a0094dd2de1596223662c3ab56617ea5d96483b3dd4695611740b9dd71", size = 208575, upload-time = "2026-01-13T04:07:34.667Z" },
 ]
 
 [[package]]
@@ -521,11 +521,11 @@ wheels = [
 
 [[package]]
 name = "tomlkit"
-version = "0.13.3"
+version = "0.14.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/cc/18/0bbf3884e9eaa38819ebe46a7bd25dcd56b67434402b66a58c4b8e552575/tomlkit-0.13.3.tar.gz", hash = "sha256:430cf247ee57df2b94ee3fbe588e71d362a941ebb545dec29b53961d61add2a1", size = 185207, upload-time = "2025-06-05T07:13:44.947Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/c3/af/14b24e41977adb296d6bd1fb59402cf7d60ce364f90c890bd2ec65c43b5a/tomlkit-0.14.0.tar.gz", hash = "sha256:cf00efca415dbd57575befb1f6634c4f42d2d87dbba376128adb42c121b87064", size = 187167, upload-time = "2026-01-13T01:14:53.304Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/bd/75/8539d011f6be8e29f339c42e633aae3cb73bffa95dd0f9adec09b9c58e85/tomlkit-0.13.3-py3-none-any.whl", hash = "sha256:c89c649d79ee40629a9fda55f8ace8c6a1b42deb912b2a8fd8d942ddadb606b0", size = 38901, upload-time = "2025-06-05T07:13:43.546Z" },
+    { url = "https://files.pythonhosted.org/packages/b5/11/87d6d29fb5d237229d67973a6c9e06e048f01cf4994dee194ab0ea841814/tomlkit-0.14.0-py3-none-any.whl", hash = "sha256:592064ed85b40fa213469f81ac584f67a4f2992509a7c3ea2d632208623a3680", size = 39310, upload-time = "2026-01-13T01:14:51.965Z" },
 ]
 
 [[package]]
