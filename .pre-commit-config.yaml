@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/dycw/actions
-    rev: 0.12.2
+    rev: 0.12.6
     hooks:
       - id: conformalize-repo
         args:
@@ -26,7 +26,7 @@ repos:
       - id: touch-py-typed
       - id: update-requirements
   - repo: https://github.com/queensberry-research/conformalize
-    rev: 0.2.9
+    rev: 0.2.10
     hooks:
       - args:
           - --ci--pull-request--pre-commit
@@ -103,4 +103,5 @@ repos:
           - highest
           - --prerelease
           - disallow
-          - --script=script.py
+          - --script
+          - script.py
