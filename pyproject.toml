@@ -21,12 +21,14 @@
   name = "conformalize"
   readme = "README.md"
   requires-python = ">= 3.13"
-  version = "0.2.15"
+  version = "0.2.16"
 
   [project.scripts]
     conformalize-cli = "conformalize.cli:_main"
 
-[[tool.uv.index]]
-  explicit = true
-  name = "gitea"
-  url = "https://qrt-bot:e43d1df41a3ecf96e4adbaf04e98cfaf094d253e@gitea.main:3000/api/packages/qrt/pypi/simple"
+[tool]
+  [tool.uv]
+    [[tool.uv.index]]
+      explicit = true
+      name = "gitea"
+      url = "https://qrt-bot:e43d1df41a3ecf96e4adbaf04e98cfaf094d253e@gitea.main:3000/api/packages/qrt/pypi/simple"
