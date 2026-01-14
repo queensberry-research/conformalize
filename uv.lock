@@ -106,7 +106,7 @@ wheels = [
 
 [[package]]
 name = "conformalize"
-version = "0.2.13"
+version = "0.2.14"
 source = { editable = "." }
 dependencies = [
     { name = "click" },
@@ -126,7 +126,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "click", specifier = ">=8.3.1,<9" },
-    { name = "dycw-actions", specifier = ">=0.13.5,<1" },
+    { name = "dycw-actions", specifier = ">=0.13.6,<1" },
     { name = "dycw-utilities", specifier = ">=0.180.1,<1" },
     { name = "rich", specifier = ">=14.2.0,<15" },
     { name = "typed-settings", extras = ["attrs", "click"], specifier = ">=25.3.0,<26" },
@@ -202,7 +202,7 @@ wheels = [
 
 [[package]]
 name = "dycw-actions"
-version = "0.13.5"
+version = "0.13.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -222,7 +222,7 @@ dependencies = [
     { name = "xdg-base-dirs" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/c1/86/6df82d94c3d6580283ba37c54e3c17f0fb69f6f6764e436242027d8c8547/dycw_actions-0.13.5-py3-none-any.whl", hash = "sha256:d4acdb0e5f35ca2ba2305f0babb4f76d693c5e2e4607b8a5108a241b45c23ac0", size = 72709, upload-time = "2026-01-14T05:31:36.413Z" },
+    { url = "https://files.pythonhosted.org/packages/0a/e8/aaaa0ff0514415cc74ef622f6ef209a288f262cda3b82e1270e5e149c28f/dycw_actions-0.13.6-py3-none-any.whl", hash = "sha256:6d88246b3176c473a7730449ef79f99b67520865280812e6ef76b0ec0c60cf5d", size = 72738, upload-time = "2026-01-14T05:48:17.583Z" },
 ]
 
 [[package]]

@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/dycw/actions
-    rev: 0.13.5
+    rev: 0.13.6
     hooks:
       - id: conformalize-repo
         args:
@@ -22,13 +22,16 @@ repos:
           - --readme
           - --repo-name=conformalize
           - --ruff
+          - --uv--native-tls
       - id: format-requirements
       - id: replace-sequence-strs
       - id: touch-empty-py
       - id: touch-py-typed
       - id: update-requirements
+        args:
+          - --native-tls
   - repo: https://github.com/queensberry-research/conformalize
-    rev: 0.2.12
+    rev: 0.2.13
     hooks:
       - args:
           - --ci--pull-request--pre-commit

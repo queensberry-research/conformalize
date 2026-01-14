@@ -6,11 +6,11 @@ from typing import TYPE_CHECKING
 from actions.pre_commit.conformalize_repo.lib import (
     add_ci_pull_request_yaml,
     add_ci_push_yaml,
+    get_tool_uv,
 )
 from actions.pre_commit.utilities import (
     ensure_contains,
     get_set_aot,
-    get_set_table,
     yield_pyproject_toml,
 )
 from tomlkit import table
@@ -151,8 +151,7 @@ def add_pyproject_toml(
     gitea_port: int = SETTINGS.gitea_port,
 ) -> None:
     with yield_pyproject_toml(modifications=modifications) as doc:
-        tool = get_set_table(doc, "tool")
-        uv = get_set_table(tool, "uv")
+        uv = get_tool_uv(doc)
         index = get_set_aot(uv, "index")
         ensure_contains(
             index, _add_pyproject_toml_index(host=gitea_host, port=gitea_port)

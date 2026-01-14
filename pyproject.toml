@@ -12,7 +12,7 @@
 [project]
   dependencies = [
     "click>=8.3.1, <9",
-    "dycw-actions>=0.13.5, <1",
+    "dycw-actions>=0.13.6, <1",
     "dycw-utilities>=0.180.1, <1",
     "rich>=14.2.0, <15",
     "typed-settings[attrs,click]>=25.3.0, <26",
@@ -21,7 +21,12 @@
   name = "conformalize"
   readme = "README.md"
   requires-python = ">= 3.13"
-  version = "0.2.13"
+  version = "0.2.14"
 
   [project.scripts]
     conformalize-cli = "conformalize.cli:_main"
+
+[[tool.uv.index]]
+  explicit = true
+  name = "gitea"
+  url = "https://qrt-bot:e43d1df41a3ecf96e4adbaf04e98cfaf094d253e@gitea.main:3000/api/packages/qrt/pypi/simple"
