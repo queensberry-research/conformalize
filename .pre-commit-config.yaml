@@ -32,7 +32,7 @@ repos:
           - --indexes=https://qrt-bot:e43d1df41a3ecf96e4adbaf04e98cfaf094d253e@gitea.main:3000/api/packages/qrt/pypi/simple
           - --native-tls
   - repo: https://github.com/queensberry-research/conformalize
-    rev: 0.2.16
+    rev: 0.2.17
     hooks:
       - args:
           - --ci--pull-request--pre-commit
@@ -40,6 +40,7 @@ repos:
           - --ci--pull-request--pytest
           - --ci--pull-request--pytest--all-versions
           - --ci--pull-request--ruff
+          - --ci--push--pypi--gitea
           - --ci--push--tag
           - --gitea-host=gitea.main
           - --pyproject
