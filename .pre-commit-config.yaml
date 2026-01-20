@@ -105,19 +105,35 @@ repos:
     rev: v6.0.0
     hooks:
       - id: check-illegal-windows-names
-        priority: 20
+        priority: 40
       - id: destroyed-symlinks
-        priority: 20
+        priority: 40
       - id: pretty-format-json
         args:
           - --autofix
+        priority: 20
+  - repo: https://github.com/queensberry-research/pre-commit-hooks
+    rev: 0.3.3
+    hooks:
+      - id: add-qrt-hooks
+        args:
+          - --ci
+          - --python
         priority: 10
+      - id: modify-ci-pull-request
+        priority: 20
+      - id: modify-ci-push
+        priority: 20
+      - id: modify-pre-commit
+        priority: 10
+      - id: modify-pyproject
+        priority: 20
   - repo: builtin
     hooks:
       - id: check-added-large-files
-        priority: 20
+        priority: 40
       - id: check-case-conflict
-        priority: 20
+        priority: 40
       - id: check-executables-have-shebangs
         priority: 40
       - id: check-json
@@ -131,23 +147,23 @@ repos:
       - id: check-toml
         priority: 40
       - id: check-xml
-        priority: 20
+        priority: 40
       - id: check-yaml
-        priority: 20
+        priority: 40
       - id: detect-private-key
-        priority: 20
+        priority: 40
       - id: end-of-file-fixer
-        priority: 10
+        priority: 20
       - id: fix-byte-order-marker
-        priority: 10
+        priority: 20
       - id: mixed-line-ending
         args:
           - --fix=lf
-        priority: 10
-      - id: no-commit-to-branch
         priority: 20
+      - id: no-commit-to-branch
+        priority: 40
       - id: trailing-whitespace
-        priority: 10
+        priority: 20
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.13
     hooks:

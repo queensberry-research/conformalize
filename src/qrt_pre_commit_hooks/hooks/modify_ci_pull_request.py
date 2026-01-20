@@ -5,11 +5,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from click import command
-from pre_commit_hooks.constants import (
-    GITEA_PULL_REQUEST_YAML,
-    GITHUB_PULL_REQUEST_YAML,
-    paths_argument,
-)
+from pre_commit_hooks.constants import GITEA_PULL_REQUEST_YAML, paths_argument
 from pre_commit_hooks.utilities import (
     ensure_contains_partial_dict,
     get_set_dict,
@@ -53,7 +49,7 @@ def _add_github_token(
     name: str,
     /,
     *,
-    path: PathLike = GITHUB_PULL_REQUEST_YAML,
+    path: PathLike = GITEA_PULL_REQUEST_YAML,
     modifications: MutableSet[Path] | None = None,
 ) -> None:
     with yield_yaml_dict(path, modifications=modifications) as dict_:
