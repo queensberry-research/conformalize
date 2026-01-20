@@ -12,9 +12,8 @@ from pre_commit_hooks.constants import (
     python_option,
 )
 from pre_commit_hooks.hooks.add_hooks import _add_hook
-from pre_commit_hooks.utilities import apply, run_all_maybe_raise
+from pre_commit_hooks.utilities import run_all, run_all_maybe_raise
 from utilities.click import CONTEXT_SETTINGS
-from utilities.concurrent import concurrent_map
 from utilities.os import is_pytest
 from utilities.types import PathLike
 
@@ -24,41 +23,24 @@ if TYPE_CHECKING:
     from collections.abc import Callable
     from pathlib import Path
 
-    from utilities.types import IntOrAll, PathLike
+    from utilities.types import PathLike
 
 
 @command(**CONTEXT_SETTINGS)
 @paths_argument
 @option("--ci", is_flag=True, default=False)
 @python_option
-def _main(
-    *,
-    paths: tuple[Path, ...],
-    ci: bool = False,
-    python: bool = False,
-    max_workers: int | None = None,
-) -> None:
+def _main(*, paths: tuple[Path, ...], ci: bool = False, python: bool = False) -> None:
     if is_pytest():
         return
     funcs: list[Callable[[], bool]] = [
-        partial(
-            _run,
-            path=p,
-            ci=ci,
-            python=python,
-            max_workers="all" if max_workers is None else max_workers,
-        )
-        for p in paths
+        partial(_run, path=p, ci=ci, python=python) for p in paths
     ]
     run_all_maybe_raise(*funcs)
 
 
 def _run(
-    *,
-    path: PathLike = PRE_COMMIT_CONFIG_YAML,
-    ci: bool = False,
-    python: bool = False,
-    max_workers: IntOrAll = "all",
+    *, path: PathLike = PRE_COMMIT_CONFIG_YAML, ci: bool = False, python: bool = False
 ) -> bool:
     funcs: list[Callable[[], bool]] = [partial(_add_modify_pre_commit, path=path)]
     if ci:
@@ -66,9 +48,7 @@ def _run(
         funcs.append(partial(_add_modify_ci_push, path=path))
     if python:
         funcs.append(partial(_add_modify_pyproject, path=path))
-    return all(
-        concurrent_map(apply, funcs, parallelism="threads", max_workers=max_workers)
-    )
+    return run_all(*funcs)
 
 
 def _add_modify_ci_pull_request(*, path: PathLike = PRE_COMMIT_CONFIG_YAML) -> bool:
