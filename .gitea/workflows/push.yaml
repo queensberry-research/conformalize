@@ -1,26 +1,26 @@
 name: push
-on:
+"on":
   push:
     branches:
       - master
 jobs:
-  publish-gitea:
+  publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Update CA certificates (publish-gitea)
+      - name: Update CA certificates
         run: sudo update-ca-certificates
       - name: Build and publish the package
         uses: dycw/action-publish-package@latest
         with:
+          native-tls: true
           token-github: ${{secrets.ACTION_TOKEN}}
           username: qrt-bot
           password: ${{secrets.PYPI_GITEA_READ_WRITE_TOKEN}}
           publish-url: https://gitea.main:3000/api/packages/qrt/pypi
-          native-tls: true
   tag:
     runs-on: ubuntu-latest
     steps:
-      - name: Update CA certificates (tag)
+      - name: Update CA certificates
         run: sudo update-ca-certificates
       - name: Tag the latest commit
         uses: dycw/action-tag-commit@latest

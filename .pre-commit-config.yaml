@@ -1,57 +1,116 @@
 repos:
-  - repo: https://github.com/dycw/actions
-    rev: 0.15.5
+  - repo: https://github.com/dycw/pre-commit-hooks
+    rev: 0.14.78
     hooks:
-      - id: conformalize-repo
+      - id: add-hooks
         args:
-          - --description=Conformalize a repo
-          - --envrc
-          - --envrc--uv
-          - --gitignore
-          - --package-name=conformalize
-          - --pre-commit--prettier
-          - --pre-commit--python
-          - --pre-commit--ruff
-          - --pre-commit--shell
-          - --pre-commit--taplo
-          - --pre-commit--uv
-          - --pyproject
-          - --pyright
-          - --pytest
+          - --ci-gitea
+          - --ci-pytest-os=ubuntu-latest
+          - --description=Pre-commit hooks
+          - --prettier
+          - --python
+          - --python-package-name-external=qrt-pre-commit-hooks
+          - --python-package-name-internal=qrt-pre-commit-hooks
+          - --python-uv-native-tls
           - --python-version=3.13
-          - --readme
-          - --repo-name=conformalize
-          - --ruff
-          - --uv--native-tls
+          - --repo-name=pre-commit-hooks
+          - --shell
+          - --toml
+          - --python-uv-index=gitea=https://qrt-bot:e43d1df41a3ecf96e4adbaf04e98cfaf094d253e@gitea.main:3000/api/packages/qrt/pypi/simple
         priority: 10
+      - id: add-future-import-annotations
+        priority: 10
+      - id: check-versions-consistent
+        priority: 20
+      - id: format-pre-commit-config
+        priority: 20
       - id: format-requirements
         priority: 10
-      - id: replace-sequence-strs
+      - id: pin-cli-requirements
+        args:
+          - --python-uv-index=gitea=https://qrt-bot:e43d1df41a3ecf96e4adbaf04e98cfaf094d253e@gitea.main:3000/api/packages/qrt/pypi/simple
+          - --python-uv-native-tls
         priority: 10
-      - id: touch-empty-py
+      - id: replace-sequence-str
         priority: 10
-      - id: touch-py-typed
+      - id: run-prek-autoupdate
+        priority: 10
+      - id: run-version-bump
+        priority: 10
+      - id: setup-bump-my-version
+        args:
+          - --python-package-name-internal=qrt-pre-commit-hooks
+        priority: 10
+      - id: setup-ci-pull-request
+        args:
+          - --gitea
+          - --repo-name=pre-commit-hooks
+          - --python-uv-native-tls
+          - --python-version=3.13
+          - --ci-pytest-os=ubuntu-latest
+        priority: 10
+      - id: setup-ci-push
+        args:
+          - --gitea
+          - --python-uv-native-tls
+        priority: 10
+      - id: setup-coverage
+        priority: 10
+      - id: setup-direnv
+        args:
+          - --python
+          - --python-uv-index=gitea=https://qrt-bot:e43d1df41a3ecf96e4adbaf04e98cfaf094d253e@gitea.main:3000/api/packages/qrt/pypi/simple
+          - --python-uv-native-tls
+          - --python-version=3.13
+        priority: 10
+      - id: setup-git
+        priority: 10
+      - id: setup-pre-commit
+        priority: 10
+      - id: setup-pyproject
+        args:
+          - --python-version=3.13
+          - --description=Pre-commit hooks
+          - --python-package-name-external=qrt-pre-commit-hooks
+          - --python-package-name-internal=qrt-pre-commit-hooks
+          - --python-uv-index=gitea=https://qrt-bot:e43d1df41a3ecf96e4adbaf04e98cfaf094d253e@gitea.main:3000/api/packages/qrt/pypi/simple
+        priority: 10
+      - id: setup-pyright
+        args:
+          - --python-version=3.13
+        priority: 10
+      - id: setup-pytest
+        args:
+          - --python-package-name-internal=qrt-pre-commit-hooks
+        priority: 10
+      - id: setup-readme
+        args:
+          - --repo-name=pre-commit-hooks
+          - --description=Pre-commit hooks
+        priority: 10
+      - id: setup-ruff
+        args:
+          - --python-version=3.13
+        priority: 10
+      - id: update-ci-action-versions
+        priority: 10
+      - id: update-ci-extensions
         priority: 10
       - id: update-requirements
         args:
-          - --indexes=https://qrt-bot:e43d1df41a3ecf96e4adbaf04e98cfaf094d253e@gitea.main:3000/api/packages/qrt/pypi/simple
-          - --native-tls
+          - --python-uv-index=gitea=https://qrt-bot:e43d1df41a3ecf96e4adbaf04e98cfaf094d253e@gitea.main:3000/api/packages/qrt/pypi/simple
+          - --python-uv-native-tls
         priority: 10
-  - repo: https://github.com/queensberry-research/conformalize
-    rev: 0.2.21
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
     hooks:
-      - id: conformalize
+      - id: check-illegal-windows-names
+        priority: 20
+      - id: destroyed-symlinks
+        priority: 20
+      - id: pretty-format-json
         args:
-          - --ci--pull-request--pyright
-          - --ci--pull-request--pytest
-          - --ci--pull-request--pytest--all-versions
-          - --ci--pull-request--ruff
-          - --ci--push--pypi--gitea
-          - --ci--push--tag
-          - --gitea-host=gitea.main
-          - --pyproject
-          - --python-version=3.13
-          - --repo-name=conformalize
+          - --autofix
         priority: 10
   - repo: builtin
     hooks:
@@ -89,57 +148,14 @@ repos:
         priority: 20
       - id: trailing-whitespace
         priority: 10
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v6.0.0
-    hooks:
-      - id: check-illegal-windows-names
-        priority: 20
-      - id: destroyed-symlinks
-        priority: 20
-      - id: pretty-format-json
-        args:
-          - --autofix
-        priority: 10
-  - repo: local
-    hooks:
-      - id: prettier
-        name: prettier
-        entry: npx prettier --write
-        language: system
-        types_or:
-          - markdown
-          - yaml
-        priority: 10
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.14.13
     hooks:
       - id: ruff-check
         args:
           - --fix
-        priority: 20
+        priority: 10
       - id: ruff-format
-        priority: 10
-  - repo: https://github.com/scop/pre-commit-shfmt
-    rev: v3.12.0-2
-    hooks:
-      - id: shfmt
-        priority: 10
-  - repo: https://github.com/koalaman/shellcheck-precommit
-    rev: v0.11.0
-    hooks:
-      - id: shellcheck
-        priority: 20
-  - repo: https://github.com/compwa/taplo-pre-commit
-    rev: v0.9.3
-    hooks:
-      - id: taplo-format
-        args:
-          - --option
-          - indent_tables=true
-          - --option
-          - indent_entries=true
-          - --option
-          - reorder_keys=true
         priority: 10
   - repo: https://github.com/astral-sh/uv-pre-commit
     rev: 0.9.26
@@ -151,4 +167,36 @@ repos:
           - highest
           - --prerelease
           - disallow
+        priority: 10
+  - repo: https://github.com/compwa/taplo-pre-commit
+    rev: v0.9.3
+    hooks:
+      - id: taplo-format
+        args:
+          - --option
+          - indent_tables=true
+          - --option
+          - indent_entries=true
+          - --option
+          - reorder_keys=true
+        priority: 20
+  - repo: https://github.com/koalaman/shellcheck-precommit
+    rev: v0.11.0
+    hooks:
+      - id: shellcheck
+        priority: 20
+  - repo: https://github.com/scop/pre-commit-shfmt
+    rev: v3.12.0-2
+    hooks:
+      - id: shfmt
+        priority: 10
+  - repo: local
+    hooks:
+      - id: prettier
+        name: prettier
+        entry: npx prettier --write
+        language: unsupported
+        types_or:
+          - markdown
+          - yaml
         priority: 10

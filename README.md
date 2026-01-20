@@ -1,3 +1,3 @@
-# `conformalize`
+# `pre-commit-hooks`
 
-Conformalize a repo
+Pre-commit hooks

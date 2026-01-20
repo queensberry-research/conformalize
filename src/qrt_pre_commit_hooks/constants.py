@@ -1,0 +1,52 @@
+from __future__ import annotations
+
+from click import option
+
+API_PACKAGES_QRT_PYPI = "api/packages/qrt/pypi"
+
+
+ACTION_TOKEN = "${{secrets.ACTION_TOKEN}}"  # noqa: S105
+SOPS_AGE_KEY = "${{secrets.SOPS_AGE_KEY}}"
+
+
+GITEA_HOST = "gitea.main"
+GITEA_PORT = 3000
+
+
+PYPI_GITEA_USERNAME = "qrt-bot"
+PYPI_GITEA_READ_TOKEN = "e43d1df41a3ecf96e4adbaf04e98cfaf094d253e"  # noqa: S105
+PYPI_GITEA_READ_WRITE_TOKEN = "${{secrets.PYPI_GITEA_READ_WRITE_TOKEN}}"  # noqa: S105
+PYPI_GITEA_READ_URL = f"https://{PYPI_GITEA_USERNAME}:{PYPI_GITEA_READ_TOKEN}@{GITEA_HOST}:{GITEA_PORT}/{API_PACKAGES_QRT_PYPI}/simple"
+PYPI_GITEA_PUBLISH_URL = f"https://{GITEA_HOST}:{GITEA_PORT}/{API_PACKAGES_QRT_PYPI}"
+
+
+PYPI_NANODE_USERNAME = "qrt"
+PYPI_NANODE_PASSWORD = "${{secrets.PYPI_NANODE_PASSWORD}}"  # noqa: S105
+
+
+PYTHON_VERSION = "3.13"
+
+
+QRT_PRE_COMMIT_HOOKS_URL = "https://github.com/queensberry-research/pre-commit-hooks"
+
+
+sops_option = option("--sops", type=str, default=None)
+
+
+__all__ = [
+    "ACTION_TOKEN",
+    "API_PACKAGES_QRT_PYPI",
+    "GITEA_HOST",
+    "GITEA_PORT",
+    "PYPI_GITEA_PUBLISH_URL",
+    "PYPI_GITEA_READ_TOKEN",
+    "PYPI_GITEA_READ_URL",
+    "PYPI_GITEA_READ_WRITE_TOKEN",
+    "PYPI_GITEA_USERNAME",
+    "PYPI_NANODE_PASSWORD",
+    "PYPI_NANODE_USERNAME",
+    "PYTHON_VERSION",
+    "QRT_PRE_COMMIT_HOOKS_URL",
+    "SOPS_AGE_KEY",
+    "sops_option",
+]

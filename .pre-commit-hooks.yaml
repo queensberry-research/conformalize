@@ -1,7 +1,23 @@
-- id: conformalize
-  name: conformalize
-  entry: conformalize-cli
+- id: modify-ci-pull-request
+  name: modify-ci-pull-request
+  entry: modify-ci-pull-request
   language: python
-  always_run: true
-  pass_filenames: false
-  description: Conformalize a repo
+  files: (\.pre-commit-config\.yaml|\.gitea/workflows/pull-request\.yaml)$
+
+- id: modify-ci-push
+  name: modify-ci-push
+  entry: modify-ci-push
+  language: python
+  files: (\.pre-commit-config\.yaml|\.gitea/workflows/push\.yaml)$
+
+- id: modify-pre-commit
+  name: modify-pre-commit
+  entry: modify-pre-commit
+  language: python
+  files: \.pre-commit-config\.yaml$
+
+- id: modify-pyproject
+  name: modify-pyproject
+  entry: modify-pyproject
+  language: python
+  files: (\.pre-commit-config\.yaml|pyproject\.toml)$
