@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from click import command
-from pre_commit_hooks.constants import GITEA_PUSH_YAML, paths_argument
+from pre_commit_hooks.constants import GITEA_PUSH_YAML, paths_argument, python_option
 from pre_commit_hooks.utilities import (
     add_update_certificates,
     ensure_contains_partial_dict,
@@ -40,19 +40,34 @@ if TYPE_CHECKING:
 
 @command(**CONTEXT_SETTINGS)
 @paths_argument
+@python_option
 @ci_nanode_option
-def _main(*, paths: tuple[Path, ...], ci_nanode: bool = False) -> None:
+def _main(
+    *, paths: tuple[Path, ...], python: bool = False, ci_nanode: bool = False
+) -> None:
     if is_pytest():
         return
     paths_use = merge_paths(*paths, target=GITEA_PUSH_YAML)
     funcs: list[Callable[[], bool]] = [
-        partial(_run, path=p, nanode=ci_nanode) for p in paths_use
+        partial(_run, path=p, python=python, nanode=ci_nanode) for p in paths_use
     ]
     run_all_maybe_raise(*funcs)
 
 
-def _run(*, path: PathLike = GITEA_PUSH_YAML, nanode: bool = False) -> bool:
+def _run(
+    *, path: PathLike = GITEA_PUSH_YAML, python: bool = False, nanode: bool = False
+) -> bool:
     modifications: set[Path] = set()
+    if python:
+        _modify_publish(path=path, modifications=modifications)
+    if nanode:
+        _add_nanode(path=path, modifications=modifications)
+    return len(modifications) == 0
+
+
+def _modify_publish(
+    *, path: PathLike = GITEA_PUSH_YAML, modifications: MutableSet[Path] | None = None
+) -> None:
     with yield_job_with(
         "publish",
         "Build and publish the package",
@@ -64,9 +79,6 @@ def _run(*, path: PathLike = GITEA_PUSH_YAML, nanode: bool = False) -> bool:
         dict_["username"] = PYPI_GITEA_USERNAME
         dict_["password"] = PYPI_GITEA_READ_WRITE_TOKEN
         dict_["publish-url"] = PYPI_GITEA_PUBLISH_URL
-    if nanode:
-        _add_nanode(path=path, modifications=modifications)
-    return len(modifications) == 0
 
 
 def _add_nanode(

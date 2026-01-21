@@ -33,21 +33,21 @@ if TYPE_CHECKING:
 @command(**CONTEXT_SETTINGS)
 @paths_argument
 @option("--ci", is_flag=True, default=False)
-@ci_nanode_option
 @python_option
+@ci_nanode_option
 @sops_option
 def _main(
     *,
     paths: tuple[Path, ...],
     ci: bool = False,
-    ci_nanode: bool = False,
     python: bool = False,
+    ci_nanode: bool = False,
     sops: str | None = None,
 ) -> None:
     if is_pytest():
         return
     funcs: list[Callable[[], bool]] = [
-        partial(_run, path=p, ci=ci, ci_nanode=ci_nanode, python=python, sops=sops)
+        partial(_run, path=p, ci=ci, python=python, ci_nanode=ci_nanode, sops=sops)
         for p in paths
     ]
     run_all_maybe_raise(*funcs)
@@ -57,13 +57,15 @@ def _run(
     *,
     path: PathLike = PRE_COMMIT_CONFIG_YAML,
     ci: bool = False,
-    ci_nanode: bool = False,
     python: bool = False,
+    ci_nanode: bool = False,
     sops: str | None = None,
 ) -> bool:
     funcs: list[Callable[[], bool]] = [partial(_add_modify_pre_commit, path=path)]
     if ci:
-        funcs.append(partial(_add_modify_ci_push, path=path, ci_nanode=ci_nanode))
+        funcs.append(
+            partial(_add_modify_ci_push, path=path, python=python, ci_nanode=ci_nanode)
+        )
     if ci and python:
         funcs.append(partial(_add_modify_ci_pull_request, path=path, sops=sops))
     if python:
@@ -93,12 +95,17 @@ def _add_modify_ci_pull_request(
 
 
 def _add_modify_ci_push(
-    *, path: PathLike = PRE_COMMIT_CONFIG_YAML, ci_nanode: bool = False
+    *,
+    path: PathLike = PRE_COMMIT_CONFIG_YAML,
+    ci_nanode: bool = False,
+    python: bool = False,
 ) -> bool:
     modifications: set[Path] = set()
     args: list[str] = []
     if ci_nanode:
         args.append("--ci-nanode")
+    if python:
+        args.append("--python")
     _add_hook(
         QRT_PRE_COMMIT_HOOKS_URL,
         "modify-ci-push",

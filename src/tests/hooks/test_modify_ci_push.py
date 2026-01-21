@@ -13,7 +13,35 @@ if TYPE_CHECKING:
 
 
 class TestModifyCIPush:
-    def test_main(self, *, tmp_path: Path) -> None:
+    def test_nanode(self, *, tmp_path: Path) -> None:
+        path = tmp_path / GITEA_PUSH_YAML
+        exp_output = strip_and_dedent(
+            """
+            jobs:
+              publish-nanode:
+                runs-on: ubuntu-latest
+                steps:
+                - name: Update CA certificates
+                  run: sudo update-ca-certificates
+                - name: Build and publish the package
+                  uses: dycw/action-publish-package@latest
+                  with:
+                    token-github: ${{secrets.ACTION_TOKEN}}
+                    username: qrt
+                    password: ${{secrets.PYPI_NANODE_PASSWORD}}
+                    publish-url: https://pypi.queensberryresearch.com
+                    native-tls: true
+              """,
+            trailing=True,
+        )
+        for i in range(2):
+            result = _run(path=path, nanode=True)
+            exp_result = i >= 1
+            assert result is exp_result
+            contents = path.read_text()
+            assert contents == exp_output
+
+    def test_python(self, *, tmp_path: Path) -> None:
         path = tmp_path / GITEA_PUSH_YAML
         input_ = strip_and_dedent(
             """
@@ -42,7 +70,7 @@ class TestModifyCIPush:
             trailing=True,
         )
         for i in range(2):
-            result = _run(path=path)
+            result = _run(path=path, python=True)
             exp_result = i >= 1
             assert result is exp_result
             contents = path.read_text()
