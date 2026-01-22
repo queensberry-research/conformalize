@@ -15,8 +15,22 @@ if TYPE_CHECKING:
 class TestModifyCIPush:
     def test_nanode(self, *, tmp_path: Path) -> None:
         path = tmp_path / GITEA_PUSH_YAML
+        input_ = normalize_multi_line_str("""
+            jobs:
+              tag:
+                steps:
+                  - name: Tag the latest commit
+                    uses: dycw/action-tag-commit@latest
+        """)
+        write_text(path, input_)
         exp_output = normalize_multi_line_str("""
             jobs:
+              tag:
+                steps:
+                - name: Tag the latest commit
+                  uses: dycw/action-tag-commit@latest
+                  with:
+                    token-github: ${{secrets.ACTION_TOKEN}}
               publish-nanode:
                 runs-on: ubuntu-latest
                 steps:
@@ -46,6 +60,10 @@ class TestModifyCIPush:
                 steps:
                   - name: Build and publish the package
                     uses: dycw/action-publish-package@latest
+              tag:
+                steps:
+                  - name: Tag the latest commit
+                    uses: dycw/action-tag-commit@latest
         """)
         write_text(path, input_)
         exp_output = normalize_multi_line_str("""
@@ -59,6 +77,12 @@ class TestModifyCIPush:
                     username: qrt-bot
                     password: ${{secrets.PYPI_GITEA_READ_WRITE_TOKEN}}
                     publish-url: https://gitea.main:3000/api/packages/qrt/pypi
+              tag:
+                steps:
+                - name: Tag the latest commit
+                  uses: dycw/action-tag-commit@latest
+                  with:
+                    token-github: ${{secrets.ACTION_TOKEN}}
           """)
         for i in range(2):
             result = _run(path=path, python=True)

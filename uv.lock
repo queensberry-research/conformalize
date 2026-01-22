@@ -123,7 +123,7 @@ wheels = [
 
 [[package]]
 name = "dycw-utilities"
-version = "0.185.5"
+version = "0.185.6"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "typing-extensions" },
@@ -132,7 +132,7 @@ dependencies = [
     { name = "whenever" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f0/34/2b2e9b2a37db7c1e19d6356a03eb4578683e66f5b61225b0d8243e6d097d/dycw_utilities-0.185.5-py3-none-any.whl", hash = "sha256:9c8cc6af1758f5ddc3b2d9e14c45b72ab2f277d0a7dc35af9564c6fe8beebaa1", size = 205207, upload-time = "2026-01-22T11:36:30.248Z" },
+    { url = "https://files.pythonhosted.org/packages/5a/f9/a09743c4cfba171c609b50fc0676fa0e1e5ce46ae3d0a3fba48f6166801b/dycw_utilities-0.185.6-py3-none-any.whl", hash = "sha256:3e3e8c65676598be84e7873ec4d739d6ed891297995a6d947dc44ab14e63f29a", size = 205135, upload-time = "2026-01-22T21:30:59.878Z" },
 ]
 
 [package.optional-dependencies]
@@ -614,7 +614,7 @@ wheels = [
 
 [[package]]
 name = "qrt-pre-commit-hooks"
-version = "0.3.17"
+version = "0.3.18"
 source = { editable = "." }
 dependencies = [
     { name = "click" },
@@ -633,13 +633,13 @@ dev = [
 requires-dist = [
     { name = "click", specifier = ">=8.3.1" },
     { name = "dycw-pre-commit-hooks", specifier = ">=0.14.116" },
-    { name = "dycw-utilities", specifier = ">=0.185.5" },
+    { name = "dycw-utilities", specifier = ">=0.185.6" },
 ]
 provides-extras = ["cli"]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "dycw-utilities", extras = ["test"], specifier = ">=0.185.5" },
+    { name = "dycw-utilities", extras = ["test"], specifier = ">=0.185.6" },
     { name = "pyright", specifier = ">=1.1.408" },
     { name = "rich", specifier = ">=14.2.0" },
 ]

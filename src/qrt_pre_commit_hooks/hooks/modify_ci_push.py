@@ -58,11 +58,25 @@ def _run(
     *, path: PathLike = GITEA_PUSH_YAML, python: bool = False, nanode: bool = False
 ) -> bool:
     modifications: set[Path] = set()
+    _modify_tag(path=path, modifications=modifications)
     if python:
         _modify_publish(path=path, modifications=modifications)
     if nanode:
         _add_nanode(path=path, modifications=modifications)
     return len(modifications) == 0
+
+
+def _modify_tag(
+    *, path: PathLike = GITEA_PUSH_YAML, modifications: MutableSet[Path] | None = None
+) -> None:
+    with yield_job_with(
+        "tag",
+        "Tag the latest commit",
+        "dycw/action-tag-commit@latest",
+        path=path,
+        modifications=modifications,
+    ) as dict_:
+        dict_["token-github"] = ACTION_TOKEN
 
 
 def _modify_publish(
