@@ -10,12 +10,6 @@ resolution-markers = [
 prerelease-mode = "disallow"
 
 [[package]]
-name = "atomicwrites"
-version = "1.4.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/87/c6/53da25344e3e3a9c01095a89f16dbcda021c609ddb42dd6d7c0528236fb2/atomicwrites-1.4.1.tar.gz", hash = "sha256:81b2c9071a49367a7f770170e5eec8cb66567cfbbc8c73d20ce5ca4a8d71cf11", size = 14227, upload-time = "2022-07-08T18:31:40.459Z" }
-
-[[package]]
 name = "click"
 version = "8.3.1"
 source = { registry = "https://pypi.org/simple" }
@@ -99,7 +93,7 @@ wheels = [
 
 [[package]]
 name = "dycw-pre-commit-hooks"
-version = "0.14.109"
+version = "0.14.116"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -112,7 +106,7 @@ dependencies = [
     { name = "xdg-base-dirs" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ea/13/804427f5e215a1c160863f4b3a8b4b03967b671bf9cde21288d0d62eccee/dycw_pre_commit_hooks-0.14.109-py3-none-any.whl", hash = "sha256:2ad855053c8490159ee146f23ae2d80dc2051672a5df7a37f1009fc2507dd4cd", size = 43033, upload-time = "2026-01-21T04:01:45.613Z" },
+    { url = "https://files.pythonhosted.org/packages/63/ce/c1e46632f477fa43d1272dcc687511bde10c462ba0ca6a4966cdda5b51af/dycw_pre_commit_hooks-0.14.116-py3-none-any.whl", hash = "sha256:32b373017cc52ceefb4f9c12eae9ab810ecf20af60eab582ba390efecbde1737", size = 44036, upload-time = "2026-01-22T21:00:53.642Z" },
 ]
 
 [[package]]
@@ -129,16 +123,16 @@ wheels = [
 
 [[package]]
 name = "dycw-utilities"
-version = "0.184.6"
+version = "0.185.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "atomicwrites" },
     { name = "typing-extensions" },
+    { name = "tzdata" },
     { name = "tzlocal" },
     { name = "whenever" },
 ]
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/60/cb/46daa268ef42a65fd7cacb7d38554e3b620dcfa630f76a40c896f39a681f/dycw_utilities-0.184.6-py3-none-any.whl", hash = "sha256:f366089631a098dd7a7e560d34d89d89931ade9c17cae46efe585851f703ddcb", size = 215636, upload-time = "2026-01-21T04:12:30.973Z" },
+    { url = "https://files.pythonhosted.org/packages/f0/34/2b2e9b2a37db7c1e19d6356a03eb4578683e66f5b61225b0d8243e6d097d/dycw_utilities-0.185.5-py3-none-any.whl", hash = "sha256:9c8cc6af1758f5ddc3b2d9e14c45b72ab2f277d0a7dc35af9564c6fe8beebaa1", size = 205207, upload-time = "2026-01-22T11:36:30.248Z" },
 ]
 
 [package.optional-dependencies]
@@ -353,11 +347,11 @@ wheels = [
 
 [[package]]
 name = "packaging"
-version = "25.0"
+version = "26.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/a1/d4/1fc4078c65507b51b96ca8f8c3ba19e6a61c8253c72794544580a7b6c24d/packaging-25.0.tar.gz", hash = "sha256:d443872c98d677bf60f6a1f2f8c1cb748e8fe762d2bf9d3148b5599295b0fc4f", size = 165727, upload-time = "2025-04-19T11:48:59.673Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/65/ee/299d360cdc32edc7d2cf530f3accf79c4fca01e96ffc950d8a52213bd8e4/packaging-26.0.tar.gz", hash = "sha256:00243ae351a257117b6a241061796684b084ed1c516a08c48a3f7e147a9d80b4", size = 143416, upload-time = "2026-01-21T20:50:39.064Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/20/12/38679034af332785aac8774540895e234f4d07f7545804097de4b666afd8/packaging-25.0-py3-none-any.whl", hash = "sha256:29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484", size = 66469, upload-time = "2025-04-19T11:48:57.875Z" },
+    { url = "https://files.pythonhosted.org/packages/b7/b9/c538f279a4e237a006a2c98387d081e9eb060d203d8ed34467cc0f0b9b53/packaging-26.0-py3-none-any.whl", hash = "sha256:b36f1fef9334a5588b4166f8bcd26a14e521f2b55e6b9de3aaa80d3ff7a37529", size = 74366, upload-time = "2026-01-21T20:50:37.788Z" },
 ]
 
 [[package]]
@@ -620,16 +614,9 @@ wheels = [
 
 [[package]]
 name = "qrt-pre-commit-hooks"
-version = "0.3.16"
+version = "0.3.17"
 source = { editable = "." }
 dependencies = [
-    { name = "click" },
-    { name = "dycw-pre-commit-hooks" },
-    { name = "dycw-utilities" },
-]
-
-[package.optional-dependencies]
-cli = [
     { name = "click" },
     { name = "dycw-pre-commit-hooks" },
     { name = "dycw-utilities" },
@@ -645,17 +632,14 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "click", specifier = ">=8.3.1" },
-    { name = "click", marker = "extra == 'cli'", specifier = "==8.3.1" },
-    { name = "dycw-pre-commit-hooks", specifier = ">=0.14.109" },
-    { name = "dycw-pre-commit-hooks", marker = "extra == 'cli'", specifier = "==0.14.109" },
-    { name = "dycw-utilities", specifier = ">=0.184.6" },
-    { name = "dycw-utilities", marker = "extra == 'cli'", specifier = "==0.184.6" },
+    { name = "dycw-pre-commit-hooks", specifier = ">=0.14.116" },
+    { name = "dycw-utilities", specifier = ">=0.185.5" },
 ]
 provides-extras = ["cli"]
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "dycw-utilities", extras = ["test"], specifier = ">=0.184.6" },
+    { name = "dycw-utilities", extras = ["test"], specifier = ">=0.185.5" },
     { name = "pyright", specifier = ">=1.1.408" },
     { name = "rich", specifier = ">=14.2.0" },
 ]

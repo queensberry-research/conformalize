@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from pre_commit_hooks.constants import GITEA_PUSH_YAML
 from pre_commit_hooks.utilities import write_text
-from utilities.text import strip_and_dedent
+from utilities.core import normalize_multi_line_str
 
 from qrt_pre_commit_hooks.hooks.modify_ci_push import _run
 
@@ -15,8 +15,7 @@ if TYPE_CHECKING:
 class TestModifyCIPush:
     def test_nanode(self, *, tmp_path: Path) -> None:
         path = tmp_path / GITEA_PUSH_YAML
-        exp_output = strip_and_dedent(
-            """
+        exp_output = normalize_multi_line_str("""
             jobs:
               publish-nanode:
                 runs-on: ubuntu-latest
@@ -31,9 +30,7 @@ class TestModifyCIPush:
                     password: ${{secrets.PYPI_NANODE_PASSWORD}}
                     publish-url: https://pypi.queensberryresearch.com
                     native-tls: true
-              """,
-            trailing=True,
-        )
+          """)
         for i in range(2):
             result = _run(path=path, nanode=True)
             exp_result = i >= 1
@@ -43,19 +40,15 @@ class TestModifyCIPush:
 
     def test_python(self, *, tmp_path: Path) -> None:
         path = tmp_path / GITEA_PUSH_YAML
-        input_ = strip_and_dedent(
-            """
+        input_ = normalize_multi_line_str("""
             jobs:
               publish:
                 steps:
                   - name: Build and publish the package
                     uses: dycw/action-publish-package@latest
-            """,
-            trailing=True,
-        )
+        """)
         write_text(path, input_)
-        exp_output = strip_and_dedent(
-            """
+        exp_output = normalize_multi_line_str("""
             jobs:
               publish:
                 steps:
@@ -66,9 +59,7 @@ class TestModifyCIPush:
                     username: qrt-bot
                     password: ${{secrets.PYPI_GITEA_READ_WRITE_TOKEN}}
                     publish-url: https://gitea.main:3000/api/packages/qrt/pypi
-              """,
-            trailing=True,
-        )
+          """)
         for i in range(2):
             result = _run(path=path, python=True)
             exp_result = i >= 1
